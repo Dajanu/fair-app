@@ -20,19 +20,13 @@
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);overscroll-behavior:none}
 .screen{display:none;flex-direction:column;min-height:100vh}
 .screen.active{display:flex}
-
-/* TOPBAR */
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;gap:12px}
 .topbar-left{flex-shrink:0}
 .owner{font-family:'Playfair Display',serif;font-size:19px;font-weight:400}
 .fair-tag{font-family:'DM Mono',monospace;font-size:10px;color:var(--red);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}
 .topbar-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .topbar-day{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);text-align:right;line-height:1.4}
-
-/* SCROLL */
 .scroll-body{flex:1;overflow-y:auto;padding:16px 16px 120px}
-
-/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:8px 0 calc(env(safe-area-inset-bottom,0px)+8px);z-index:20}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 12px;border-radius:12px;color:var(--muted)}
 .bnav-btn:active{background:var(--surface2)}
@@ -40,35 +34,24 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .bnav-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--dim)}
 .bnav-new{background:var(--accent);border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;margin-bottom:4px;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:transform .12s;flex-shrink:0;font-size:26px;color:#fff}
 .bnav-new:active{transform:scale(0.94)}
-
-/* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 8px;text-align:center}
 .stat-num{font-family:'Playfair Display',serif;font-size:24px;color:var(--text);line-height:1}
 .stat-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.06em;margin-top:3px}
-
-/* PROCESS BANNER */
-.process-banner{background:var(--accent);border-radius:var(--r);padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
+.process-banner{background:var(--accent);border-radius:var(--r);padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
 .process-banner:active{opacity:.85}
 .pb-title{font-family:'Playfair Display',serif;font-size:17px;color:#fff}
 .pb-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;font-family:'DM Mono',monospace}
 .pb-btn{background:#fff;color:var(--accent);border:none;border-radius:20px;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;flex-shrink:0}
-
-/* SEARCH */
+.archive-banner{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;display:none;align-items:center;justify-content:space-between;gap:12px}
 .search-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:12px}
 .search-bar input{flex:1;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;background:transparent;color:var(--text)}
 .search-bar input::placeholder{color:var(--dim)}
-
-/* FILTER */
 .filter-row{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
 .filter-row::-webkit-scrollbar{display:none}
 .fpill{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;padding:6px 11px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s}
 .fpill.active{background:var(--accent);border-color:var(--accent);color:#fff}
-
-/* LIST HEADING */
 .list-heading{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
-
-/* SUPPLIER CARDS */
 .supplier-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px 14px;margin-bottom:8px;cursor:pointer;display:flex;gap:12px;align-items:flex-start;position:relative;overflow:hidden;touch-action:pan-y}
 .supplier-card.unprocessed{border-left:3px solid var(--amber)}
 .supplier-card:active{border-color:var(--border-dark)}
@@ -91,23 +74,16 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .card-cat{background:var(--surface2);color:var(--muted);padding:1px 6px;border-radius:4px;font-size:9px}
 .quick-actions{display:flex;gap:6px;margin-top:8px}
 .qa-btn{padding:5px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
-.qa-btn:active{background:var(--surface3)}
 .empty-state{text-align:center;padding:50px 20px;color:var(--dim);font-size:14px;line-height:2}
-
-/* PAGE HEADER */
 .page-header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
 .page-title{font-family:'Playfair Display',serif;font-size:19px;flex:1}
 .back-btn{background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;flex-shrink:0}
 .page-body{flex:1;overflow-y:auto;padding:16px 16px 120px}
-
-/* CAPTURE */
 .capture-hint{background:var(--surface2);border-radius:var(--rsm);padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:20px}
 .capture-hint strong{color:var(--text);font-weight:500}
 .field-section{margin-bottom:20px}
 .field-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .field-badge{background:var(--red);color:#fff;font-size:9px;padding:1px 6px;border-radius:20px}
-
-/* PHOTO ZONE */
 .photo-zone{border:1.5px dashed var(--border-dark);border-radius:var(--r);padding:26px 16px;text-align:center;cursor:pointer;background:var(--surface);position:relative;transition:border-color .15s}
 .photo-zone.has-photos{border-color:var(--accent);border-style:solid}
 .photo-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -118,8 +94,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .photo-thumb{aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--surface2);position:relative}
 .photo-thumb img{width:100%;height:100%;object-fit:cover}
 .photo-remove{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-
-/* FAIR PILLS */
 .fair-pill-row{display:flex;gap:7px;flex-wrap:wrap}
 .fair-pill{padding:7px 13px;border-radius:20px;border:1.5px solid var(--border-dark);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s;font-family:'DM Mono',monospace;font-size:11px}
 .fair-pill.selected{border-color:var(--accent);background:var(--accent);color:#fff}
@@ -127,8 +101,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .fair-custom-input.visible{display:block}
 .fair-custom-input:focus{border-color:var(--accent)}
 .date-display{font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);margin-top:8px}
-
-/* VOICE */
 .voice-hint{background:var(--surface2);border-radius:var(--rsm);padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px}
 .voice-hint strong{color:var(--green)}
 .voice-btn{width:100%;padding:18px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .15s,background .15s}
@@ -138,15 +110,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .voice-transcript{display:none;margin-top:8px;padding:11px 13px;background:var(--surface2);border-radius:var(--rsm);font-size:13px;color:var(--muted);line-height:1.6}
 .voice-transcript.show{display:block}
-
-/* PRIORITY */
 .priority-row{display:flex;gap:8px}
 .priority-btn{flex:1;padding:10px 6px;border-radius:var(--rsm);border:1.5px solid var(--border);background:var(--surface);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;text-align:center;color:var(--muted)}
 .priority-btn.sel-standard{border-color:var(--border-dark);background:var(--surface2);color:var(--muted)}
 .priority-btn.sel-interesting{border-color:var(--amber);background:#fff8e6;color:var(--amber)}
 .priority-btn.sel-must{border-color:var(--red);background:#fff0f0;color:var(--red);font-weight:500}
-
-/* SAMPLE */
 .sample-row{display:flex;gap:10px;align-items:center}
 .sample-toggle{width:44px;height:26px;border-radius:13px;background:var(--border-dark);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
 .sample-toggle.on{background:var(--green)}
@@ -158,31 +126,22 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .sample-photo-zone.visible{display:block}
 .sample-photo-preview{width:100%;height:130px;border-radius:var(--rsm);overflow:hidden;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-direction:column;gap:4px}
 .sample-photo-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
-
-/* VISIT AGAIN */
 .visit-again-btn{width:100%;padding:14px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
 .visit-again-btn.on{border-color:var(--green);background:#f0f7f4;color:var(--green)}
-
 textarea{width:100%;padding:13px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;line-height:1.6;transition:border-color .15s}
 textarea:focus{border-color:var(--accent)}
 textarea::placeholder{color:var(--dim)}
-
-/* BOTTOM BAR */
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:10px 16px calc(env(safe-area-inset-bottom,0px)+10px);background:linear-gradient(to bottom,transparent,var(--bg) 30%);z-index:20}
 .primary-btn{width:100%;padding:17px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;cursor:pointer;transition:transform .12s,opacity .12s}
 .primary-btn:active{transform:scale(0.98)}
 .primary-btn:disabled{opacity:.35;cursor:not-allowed}
 .ghost-btn{width:100%;padding:13px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;margin-top:8px}
-
-/* PROCESSING */
 .processing-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:40px;text-align:center}
 .spinner{width:46px;height:46px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--accent);animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .proc-fair{font-family:'Playfair Display',serif;font-size:21px}
 .proc-progress{font-family:'DM Mono',monospace;font-size:13px;color:var(--text)}
 .proc-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em}
-
-/* RESULT */
 .result-photos{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:16px}
 .result-photo{aspect-ratio:1;border-radius:7px;overflow:hidden;background:var(--surface2)}
 .result-photo img{width:100%;height:100%;object-fit:cover}
@@ -191,8 +150,6 @@ textarea::placeholder{color:var(--dim)}
 .editable{font-size:15px;color:var(--text);outline:none;width:100%;background:transparent;border:none;font-family:'DM Sans',sans-serif;line-height:1.5}
 .editable:focus{color:var(--red)}
 select.editable{cursor:pointer;appearance:none}
-
-/* WECHAT PROMPT */
 .wechat-prompt{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
 .wechat-prompt.show{display:flex}
 .wechat-card{background:var(--surface);border-radius:var(--r) var(--r) 0 0;padding:24px 20px calc(env(safe-area-inset-bottom,0px)+24px);width:100%}
@@ -201,8 +158,6 @@ select.editable{cursor:pointer;appearance:none}
 .wechat-remark{background:var(--surface2);border-radius:var(--rsm);padding:14px 16px;font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--text);margin-bottom:16px;word-break:break-all;border:1px solid var(--border);text-align:center}
 .wechat-open-btn{width:100%;padding:16px;background:#07C160;color:#fff;border:none;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;cursor:pointer;margin-bottom:10px}
 .wechat-later-btn{width:100%;padding:13px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer}
-
-/* DETAIL */
 .detail-hero{width:100%;height:200px;background:var(--surface2);overflow:hidden}
 .detail-hero img{width:100%;height:100%;object-fit:cover}
 .detail-hero-empty{width:100%;height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:13px}
@@ -221,8 +176,6 @@ select.editable{cursor:pointer;appearance:none}
 .detail-action:active{background:var(--surface2)}
 .detail-action-icon{font-size:18px;margin-bottom:3px}
 .detail-action-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.04em}
-
-/* SUMMARY MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:none;align-items:flex-end}
 .modal-overlay.show{display:flex}
 .modal{background:var(--surface);border-radius:var(--r) var(--r) 0 0;padding:20px 20px calc(env(safe-area-inset-bottom,0px)+20px);width:100%;max-height:85vh;overflow-y:auto}
@@ -232,8 +185,6 @@ select.editable{cursor:pointer;appearance:none}
 .summary-stat:last-child{border-bottom:none}
 .summary-stat-label{font-size:14px;color:var(--muted)}
 .summary-stat-val{font-family:'Playfair Display',serif;font-size:22px}
-
-/* SETTINGS */
 .settings-section{margin-bottom:26px}
 .settings-section-title{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:12px}
 .settings-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.08em;margin-bottom:7px}
@@ -241,8 +192,6 @@ input[type=password],input[type=date],input[type=text]{width:100%;padding:13px 1
 input[type=password]:focus,input[type=date]:focus,input[type=text]:focus{border-color:var(--accent)}
 select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:var(--rsm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:10px;appearance:none}
 .api-note{background:var(--surface2);border-radius:var(--rsm);padding:11px 13px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
-
-/* TOAST */
 .toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+100px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:500;opacity:0;transition:opacity .25s,transform .25s;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
@@ -268,20 +217,16 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
       <div class="stat-card"><div class="stat-num" id="st-samples">0</div><div class="stat-lbl">Samples</div></div>
     </div>
     <div class="process-banner" id="process-banner" style="display:none" onclick="startBatchProcess()">
-      <div>
-        <div class="pb-title">Process with AI</div>
-        <div class="pb-sub" id="pb-sub">0 suppliers waiting</div>
-      </div>
+      <div><div class="pb-title">Process with AI</div><div class="pb-sub" id="pb-sub">0 waiting</div></div>
       <button class="pb-btn">Process now →</button>
     </div>
-    <div id="archive-banner" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:12px">
+    <div class="archive-banner" id="archive-banner">
       <div>
         <div style="font-weight:500;font-size:15px">Free up space</div>
         <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px" id="archive-sub">Archive photos from processed suppliers</div>
       </div>
-      <button onclick="archiveProcessed()" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0">Archive →</button>
+      <button type="button" onclick="archiveProcessed()" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0">Archive →</button>
     </div>
-
     <div class="search-bar">
       <span style="font-size:14px;color:var(--dim)">🔍</span>
       <input type="text" id="search-input" placeholder="Search suppliers…" oninput="renderHome()">
@@ -299,11 +244,11 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
     <div id="supplier-list"></div>
   </div>
   <nav class="bottom-nav">
-    <button class="bnav-btn" onclick="showSummary()"><span class="bnav-icon">📊</span><span class="bnav-label">Summary</span></button>
-    <button class="bnav-btn" onclick="showScreen('screen-settings')"><span class="bnav-icon">⚙️</span><span class="bnav-label">Settings</span></button>
-    <button class="bnav-new" onclick="showCapture()">+</button>
-    <button class="bnav-btn" onclick="syncToNotion()"><span class="bnav-icon" style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">N↑</span><span class="bnav-label">Notion</span></button>
-    <button class="bnav-btn" onclick="exportCSV()"><span class="bnav-icon">📤</span><span class="bnav-label">Export</span></button>
+    <button type="button" class="bnav-btn" onclick="showSummary()"><span class="bnav-icon">📊</span><span class="bnav-label">Summary</span></button>
+    <button type="button" class="bnav-btn" onclick="showScreen('screen-settings')"><span class="bnav-icon">⚙️</span><span class="bnav-label">Settings</span></button>
+    <button type="button" class="bnav-new" onclick="showCapture()">+</button>
+    <button type="button" class="bnav-btn" onclick="syncToNotion()"><span class="bnav-icon" style="font-family:'DM Mono',monospace;font-size:15px;font-weight:500">N↑</span><span class="bnav-label">Notion</span></button>
+    <button type="button" class="bnav-btn" onclick="exportCSV()"><span class="bnav-icon">📤</span><span class="bnav-label">Export</span></button>
   </nav>
 </div>
 
@@ -315,10 +260,7 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
     <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim)" id="cap-day"></span>
   </div>
   <div class="page-body">
-    <div class="capture-hint">
-      <strong>Fast capture.</strong> Photos + voice note — AI processes later. No waiting at the booth.
-    </div>
-
+    <div class="capture-hint"><strong>Fast capture.</strong> Photos + voice note — AI processes everything later. No waiting at the booth.</div>
     <div class="field-section">
       <div class="field-label">Fair</div>
       <div class="fair-pill-row" id="fair-pills">
@@ -329,7 +271,6 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
       <input class="fair-custom-input" id="custom-fair" placeholder="Fair name…">
       <div class="date-display" id="date-display"></div>
     </div>
-
     <div class="field-section">
       <div class="field-label">Photos <span class="field-badge" id="photo-badge" style="display:none"></span></div>
       <div class="photo-zone" id="photo-zone">
@@ -340,30 +281,26 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
       </div>
       <div class="photo-grid" id="photo-grid"></div>
     </div>
-
     <div class="field-section">
       <div class="field-label">Voice note <span style="color:var(--dim);font-size:9px">(po polsku)</span></div>
       <div class="voice-hint">Powiedz: <strong>MOQ, cena, wrażenie, WeChat, hala i stoisko</strong></div>
-      <button class="voice-btn" id="voice-btn" onclick="toggleRecording()">
-        <span id="voice-icon">🎙</span>
-        <span id="voice-label">Nagraj notatkę</span>
+      <button type="button" class="voice-btn" id="voice-btn" onclick="toggleRecording()">
+        <span id="voice-icon">🎙</span><span id="voice-label">Nagraj notatkę</span>
       </button>
       <div class="voice-transcript" id="voice-transcript"></div>
     </div>
-
     <div class="field-section">
       <div class="field-label">Priority</div>
       <div class="priority-row">
-        <button class="priority-btn sel-standard" id="pri-standard" onclick="setPriority('Standard')">Standard</button>
-        <button class="priority-btn" id="pri-interesting" onclick="setPriority('Interesting')">⭐⭐ Ciekawy</button>
-        <button class="priority-btn" id="pri-must" onclick="setPriority('Must')">⭐⭐⭐ Must</button>
+        <button type="button" class="priority-btn sel-standard" id="pri-standard" onclick="setPriority('Standard')">Standard</button>
+        <button type="button" class="priority-btn" id="pri-interesting" onclick="setPriority('Interesting')">⭐⭐ Ciekawy</button>
+        <button type="button" class="priority-btn" id="pri-must" onclick="setPriority('Must')">⭐⭐⭐ Must</button>
       </div>
     </div>
-
     <div class="field-section">
       <div class="field-label">Sample taken</div>
       <div class="sample-row">
-        <button class="sample-toggle" id="sample-toggle" onclick="toggleSample()"></button>
+        <button type="button" class="sample-toggle" id="sample-toggle" onclick="toggleSample()"></button>
         <input class="sample-ref-input" id="sample-ref" placeholder="Sample ref…">
       </div>
       <div class="sample-photo-zone" id="sample-photo-zone">
@@ -375,22 +312,19 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
         </div>
       </div>
     </div>
-
     <div class="field-section">
       <div class="field-label">Visit again?</div>
-      <button class="visit-again-btn" id="visit-again-btn" onclick="toggleVisitAgain()">
-        <span id="visit-icon">📍</span>
-        <span id="visit-label">Mark to revisit</span>
+      <button type="button" class="visit-again-btn" id="visit-again-btn" onclick="toggleVisitAgain()">
+        <span id="visit-icon">📍</span><span id="visit-label">Mark to revisit</span>
       </button>
     </div>
-
     <div class="field-section">
       <div class="field-label">Quick note</div>
       <textarea id="text-note" rows="2" placeholder="Hall, booth, anything extra…"></textarea>
     </div>
   </div>
   <div class="bottom-bar">
-    <button class="primary-btn" onclick="saveRaw()">Save & next supplier →</button>
+    <button type="button" class="primary-btn" onclick="saveRaw()">Save & next supplier →</button>
   </div>
 </div>
 
@@ -418,8 +352,8 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
   <div class="page-body">
     <div class="result-photos" id="result-photos"></div>
     <div id="result-fields"></div>
-    <button class="primary-btn" onclick="confirmResult()">Confirm & next →</button>
-    <button class="ghost-btn" onclick="skipResult()">Skip</button>
+    <button type="button" class="primary-btn" onclick="confirmResult()">Confirm & next →</button>
+    <button type="button" class="ghost-btn" onclick="skipResult()">Skip</button>
   </div>
 </div>
 
@@ -447,7 +381,7 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
       <div class="settings-label">API key</div>
       <div style="position:relative">
         <input type="password" id="api-key-input" placeholder="sk-ant-…" style="padding-right:50px;margin-bottom:0">
-        <button onclick="toggleShow('api-key-input',this)" style="position:absolute;right:12px;top:14px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
+        <button type="button" onclick="toggleShow('api-key-input',this)" style="position:absolute;right:12px;top:14px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
       </div>
     </div>
     <div class="settings-section">
@@ -456,32 +390,32 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
       <input type="date" id="fair-start-input">
       <div class="settings-label">Voice language</div>
       <select id="voice-lang-input">
-        <option value="pl-PL">🇵🇱 Polish</option>
-        <option value="en-US">🇺🇸 English</option>
-        <option value="zh-CN">🇨🇳 Chinese</option>
-        <option value="de-DE">🇩🇪 German</option>
+        <option value="pl-PL">Polish</option>
+        <option value="en-US">English</option>
+        <option value="zh-CN">Chinese</option>
+        <option value="de-DE">German</option>
       </select>
     </div>
     <div class="settings-section">
       <div class="settings-section-title">Notion sync</div>
-      <div class="api-note">Connect your Notion Suppliers database to sync processed suppliers.</div>
-      <button type="button" class="ghost-btn" style="margin-bottom:10px;margin-top:0" onclick="testNotionConnection()">Test connection →</button>
+      <div class="api-note">Connect your Notion Suppliers database.</div>
       <div class="settings-label">Notion integration key</div>
       <div style="position:relative">
         <input type="password" id="notion-key-input" placeholder="secret_…" style="padding-right:50px;margin-bottom:10px">
-        <button onclick="toggleShow('notion-key-input',this)" style="position:absolute;right:12px;top:14px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
+        <button type="button" onclick="toggleShow('notion-key-input',this)" style="position:absolute;right:12px;top:14px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
       </div>
       <div class="settings-label">Notion database ID</div>
       <div style="position:relative">
-        <input type="password" id="notion-db-input" placeholder="32-character ID" style="padding-right:50px;margin-bottom:0">
-        <button onclick="toggleShow('notion-db-input',this)" style="position:absolute;right:12px;top:14px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
+        <input type="password" id="notion-db-input" placeholder="32-character ID" style="padding-right:50px;margin-bottom:10px">
+        <button type="button" onclick="toggleShow('notion-db-input',this)" style="position:absolute;right:12px;top:14px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
       </div>
+      <button type="button" class="ghost-btn" style="margin-top:0;margin-bottom:10px" onclick="testNotionConnection()">Test connection →</button>
     </div>
-    <button class="primary-btn" style="margin-top:16px" onclick="saveSettings()">Save all settings</button>
+    <button type="button" class="primary-btn" onclick="saveSettings()">Save all settings</button>
     <div class="settings-section" style="margin-top:24px">
       <div class="settings-section-title">Data</div>
-      <button class="ghost-btn" style="text-align:left;margin-top:0" onclick="exportCSV()">Export all suppliers as CSV →</button>
-      <button class="ghost-btn" style="text-align:left;color:var(--red);border-color:var(--red)" onclick="clearAllData()">Clear all data →</button>
+      <button type="button" class="ghost-btn" style="margin-top:0;text-align:left" onclick="exportCSV()">Export all suppliers as CSV →</button>
+      <button type="button" class="ghost-btn" style="text-align:left;color:var(--red);border-color:var(--red)" onclick="clearAllData()">Clear all data →</button>
     </div>
   </div>
 </div>
@@ -492,7 +426,7 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
     <div class="modal-handle"></div>
     <div class="modal-title" id="summary-title">Today's summary</div>
     <div id="summary-content"></div>
-    <button class="primary-btn" style="margin-top:16px" onclick="closeSummary()">Done</button>
+    <button type="button" class="primary-btn" style="margin-top:16px" onclick="closeSummary()">Done</button>
   </div>
 </div>
 
@@ -500,93 +434,96 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
 <div class="wechat-prompt" id="wechat-prompt">
   <div class="wechat-card">
     <div class="wechat-title">Dodaj na WeChat</div>
-    <div class="wechat-sub">Skopiuj tę nazwę i ustaw jako uwagę kontaktu w WeChat. Już jest w schowku.</div>
+    <div class="wechat-sub">Ustaw tę nazwę jako uwagę kontaktu w WeChat. Jest już skopiowana do schowka.</div>
     <div class="wechat-remark" id="wechat-remark-text"></div>
-    <button class="wechat-open-btn" onclick="openWeChatApp()">Otwórz WeChat</button>
-    <button class="wechat-later-btn" onclick="closeWeChatPrompt()">Później</button>
+    <button type="button" class="wechat-open-btn" onclick="openWeChatApp()">Otwórz WeChat</button>
+    <button type="button" class="wechat-later-btn" onclick="closeWeChatPrompt()">Później</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SK='damian_v6', SK2='damian_cfg_v6';
+const SK='damian_v7', SK2='damian_cfg_v7';
+const PROXY='https://notion-proxy-ruddy.vercel.app';
 let photos=[], recording=false, recorder=null, chunks=[], recog=null, transcript='';
 let fair='ChinaPlas 2026', priority='Standard', visitAgain=false, sampleOn=false, samplePhotoData=null;
 let filterMode='all', viewId=null;
 let processingQueue=[], processingIdx=0, processingActive=false;
 let currentResult=null, resultQueue=[], resultIdx=0;
-let swipeStartX={}, swipeCurrentX={}, swipeId=null;
 
 const FIELDS=[
   {k:'company',l:'Company name'},{k:'contact_name',l:'Contact person'},
   {k:'phone',l:'Phone'},{k:'wechat_id',l:'WeChat ID'},{k:'wechat_name',l:'WeChat display name'},
-  {k:'email',l:'Email'},{k:'website',l:'Website'},
-  {k:'category',l:'Category'},{k:'products',l:'Products'},
+  {k:'email',l:'Email'},{k:'category',l:'Category'},{k:'products',l:'Products'},
   {k:'hall_booth',l:'Hall & booth'},{k:'moq',l:'MOQ'},
-  {k:'price_range',l:'Price range'},{k:'notes',l:'AI notes'},
-  {k:'buyer_notes',l:'Your notes'}
+  {k:'price_range',l:'Price range'},{k:'notes',l:'AI notes'},{k:'buyer_notes',l:'Your notes'}
 ];
-
 const CATS=['Machinery','Plastic Additives','Raw Materials','Packaging','Chemicals','Molds & Tooling','Automation','Recycling','Testing Equipment','Accessories','Other'];
 
-function today(){return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
-function todayISO(){return new Date().toISOString().split('T')[0]}
-function fmtDate(iso){if(!iso)return'';return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
-function pillClass(s){return{New:'pill-new',Sampling:'pill-sampling',Ordered:'pill-ordered',Pass:'pill-pass'}[s]||'pill-new'}
-function priorityEmoji(p){return{Standard:'',Interesting:'⭐⭐',Must:'⭐⭐⭐'}[p]||''}
+function today(){return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function todayISO(){return new Date().toISOString().split('T')[0];}
+function fmtDate(iso){if(!iso)return'';return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
+function pillClass(s){return{New:'pill-new',Sampling:'pill-sampling',Ordered:'pill-ordered',Pass:'pill-pass'}[s]||'pill-new';}
+function priorityEmoji(p){return{Standard:'',Interesting:'⭐⭐',Must:'⭐⭐⭐'}[p]||'';}
 
 function getDayNum(){
-  const cfg=getSettings();if(!cfg.fairStart)return null;
-  const diff=Math.floor((new Date()-new Date(cfg.fairStart))/(1000*60*60*24))+1;
+  var cfg=getSettings();if(!cfg.fairStart)return null;
+  var diff=Math.floor((new Date()-new Date(cfg.fairStart))/(1000*60*60*24))+1;
   return diff>0&&diff<=14?diff:null;
 }
 
-// PHOTO COMPRESSION - key for storage
 function compressPhoto(file){
-  return new Promise(resolve=>{
-    const img=new Image();
-    const url=URL.createObjectURL(file);
-    img.onload=()=>{
+  return new Promise(function(resolve){
+    var img=new Image();
+    var url=URL.createObjectURL(file);
+    img.onload=function(){
       URL.revokeObjectURL(url);
-      const MAX=1200;
-      let w=img.width,h=img.height;
+      var MAX=1200,w=img.width,h=img.height;
       if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
       else if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
-      const canvas=document.createElement('canvas');
+      var canvas=document.createElement('canvas');
       canvas.width=w;canvas.height=h;
       canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const dataUrl=canvas.toDataURL('image/jpeg',0.75);
-      resolve({base64:dataUrl.split(',')[1],dataUrl,type:'image/jpeg'});
+      var dataUrl=canvas.toDataURL('image/jpeg',0.75);
+      resolve({base64:dataUrl.split(',')[1],dataUrl:dataUrl,type:'image/jpeg'});
     };
-    img.onerror=()=>{
-      // fallback - read as-is
-      const r=new FileReader();
-      r.onload=e=>resolve({base64:e.target.result.split(',')[1],dataUrl:e.target.result,type:file.type||'image/jpeg'});
+    img.onerror=function(){
+      var r=new FileReader();
+      r.onload=function(e){resolve({base64:e.target.result.split(',')[1],dataUrl:e.target.result,type:file.type||'image/jpeg'});};
       r.readAsDataURL(file);
     };
     img.src=url;
   });
 }
 
+function getSettings(){try{return JSON.parse(localStorage.getItem(SK2))||{};}catch(e){return{};}}
+function getSuppliers(){try{return JSON.parse(localStorage.getItem(SK))||[];}catch(e){return[];}}
+function updateSupplier(s){
+  var all=getSuppliers();
+  var idx=all.findIndex(function(x){return x.id===s.id;});
+  if(idx>=0)all[idx]=s;else all.unshift(s);
+  localStorage.setItem(SK,JSON.stringify(all));
+}
+
 function init(){
-  const cfg=getSettings();
+  var cfg=getSettings();
   document.getElementById('api-key-input').value=cfg.apiKey||'';
   document.getElementById('fair-start-input').value=cfg.fairStart||'';
   document.getElementById('notion-key-input').value=cfg.notionKey||'';
   document.getElementById('notion-db-input').value=cfg.notionDb||'';
   document.getElementById('voice-lang-input').value=cfg.voiceLang||'pl-PL';
   document.getElementById('date-display').textContent='Date: '+today();
-  const d=getDayNum();
-  const el=document.getElementById('home-day-info');
-  if(d) el.innerHTML='Day '+d+'<br>'+today(); else el.textContent=today();
-  const cap=document.getElementById('cap-day');
-  if(cap&&d) cap.textContent='Day '+d;
+  var d=getDayNum();
+  var el=document.getElementById('home-day-info');
+  if(d)el.innerHTML='Day '+d+'<br>'+today();else el.textContent=today();
+  var cap=document.getElementById('cap-day');
+  if(cap&&d)cap.textContent='Day '+d;
   renderHome();
 }
 
 function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
@@ -604,7 +541,7 @@ function showCapture(){
   document.getElementById('text-note').value='';
   document.getElementById('photo-input').value='';
   document.getElementById('custom-fair').classList.remove('visible');
-  document.querySelectorAll('.fair-pill').forEach(p=>p.classList.remove('selected'));
+  document.querySelectorAll('.fair-pill').forEach(function(p){p.classList.remove('selected');});
   document.querySelector('.fair-pill[data-fair="ChinaPlas 2026"]').classList.add('selected');
   document.getElementById('pri-standard').className='priority-btn sel-standard';
   document.getElementById('pri-interesting').className='priority-btn';
@@ -622,64 +559,72 @@ function showCapture(){
 }
 
 function selectFair(el){
-  document.querySelectorAll('.fair-pill').forEach(p=>p.classList.remove('selected'));
+  document.querySelectorAll('.fair-pill').forEach(function(p){p.classList.remove('selected');});
   el.classList.add('selected');
-  const ci=document.getElementById('custom-fair');
-  if(el.dataset.fair==='custom'){ci.classList.add('visible');ci.focus();fair=ci.value||'';ci.oninput=()=>{fair=ci.value};}
-  else{ci.classList.remove('visible');fair=el.dataset.fair;}
+  var ci=document.getElementById('custom-fair');
+  if(el.dataset.fair==='custom'){
+    ci.classList.add('visible');ci.focus();fair=ci.value||'';
+    ci.oninput=function(){fair=ci.value;};
+  } else {
+    ci.classList.remove('visible');fair=el.dataset.fair;
+  }
 }
 
-async function handlePhotos(input){
-  const files=Array.from(input.files);
-  for(const f of files){
-    const compressed=await compressPhoto(f);
-    photos.push(compressed);
-    renderGrid();
-    const b=document.getElementById('photo-badge');
-    b.textContent=photos.length;b.style.display='inline';
-  }
+function handlePhotos(input){
+  var files=Array.from(input.files);
+  var promise=Promise.resolve();
+  files.forEach(function(f){
+    promise=promise.then(function(){
+      return compressPhoto(f).then(function(compressed){
+        photos.push(compressed);
+        renderGrid();
+        var b=document.getElementById('photo-badge');
+        b.textContent=photos.length;b.style.display='inline';
+      });
+    });
+  });
   document.getElementById('photo-zone').classList.add('has-photos');
 }
 
 function renderGrid(){
-  document.getElementById('photo-grid').innerHTML=photos.map((p,i)=>`
-    <div class="photo-thumb"><img src="${p.dataUrl}">
-    <button class="photo-remove" onclick="removePhoto(${i})">×</button></div>`).join('');
+  document.getElementById('photo-grid').innerHTML=photos.map(function(p,i){
+    return '<div class="photo-thumb"><img src="'+p.dataUrl+'"><button class="photo-remove" onclick="removePhoto('+i+')">×</button></div>';
+  }).join('');
 }
 
 function removePhoto(i){
   photos.splice(i,1);renderGrid();
-  const b=document.getElementById('photo-badge');
+  var b=document.getElementById('photo-badge');
   if(!photos.length){b.style.display='none';document.getElementById('photo-zone').classList.remove('has-photos');}
   else b.textContent=photos.length;
 }
 
-function toggleRecording(){recording?stopRec():startRec();}
+function toggleRecording(){if(recording)stopRec();else startRec();}
 
 function startRec(){
   transcript='';
-  const lang=getSettings().voiceLang||'pl-PL';
+  var lang=getSettings().voiceLang||'pl-PL';
   if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
-    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
     recog=new SR();recog.continuous=true;recog.interimResults=true;recog.lang=lang;
-    recog.onresult=e=>{
-      let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;
+    recog.onresult=function(e){
+      var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;
       transcript=t;
-      const el=document.getElementById('voice-transcript');
+      var el=document.getElementById('voice-transcript');
       el.textContent=t;el.className='voice-transcript show';
     };
     try{recog.start();}catch(e){}
   }
-  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
     recorder=new MediaRecorder(stream);chunks=[];
-    recorder.ondataavailable=e=>chunks.push(e.data);
-    recorder.onstop=()=>stream.getTracks().forEach(t=>t.stop());
+    recorder.ondataavailable=function(e){chunks.push(e.data);};
+    recorder.onstop=function(){stream.getTracks().forEach(function(t){t.stop();});};
     recorder.start();
     recording=true;
     document.getElementById('voice-btn').className='voice-btn recording';
     document.getElementById('voice-label').textContent='Nagrywanie… dotknij aby zatrzymać';
     document.getElementById('voice-icon').innerHTML='<span class="rec-dot"></span>';
-  }).catch(()=>{
+  }).catch(function(){
     recording=true;
     document.getElementById('voice-btn').className='voice-btn recording';
     document.getElementById('voice-label').textContent='Nagrywanie… dotknij aby zatrzymać';
@@ -707,13 +652,13 @@ function toggleSample(){
   document.getElementById('sample-toggle').className='sample-toggle'+(sampleOn?' on':'');
   document.getElementById('sample-ref').className='sample-ref-input'+(sampleOn?' visible':'');
   document.getElementById('sample-photo-zone').className='sample-photo-zone'+(sampleOn?' visible':'');
-  if(sampleOn) setTimeout(()=>document.getElementById('sample-photo-input').click(),300);
+  if(sampleOn)setTimeout(function(){document.getElementById('sample-photo-input').click();},300);
   else{samplePhotoData=null;document.getElementById('sample-photo-img').style.display='none';document.getElementById('sample-empty').style.display='block';}
 }
 
 function handleSamplePhoto(input){
-  const file=input.files[0];if(!file)return;
-  compressPhoto(file).then(compressed=>{
+  var file=input.files[0];if(!file)return;
+  compressPhoto(file).then(function(compressed){
     samplePhotoData=compressed;
     document.getElementById('sample-photo-img').src=compressed.dataUrl;
     document.getElementById('sample-photo-img').style.display='block';
@@ -732,49 +677,43 @@ function saveRaw(){
   if(!photos.length&&!transcript&&!document.getElementById('text-note').value.trim()){
     showToast('Dodaj zdjęcie lub notatkę głosową');return;
   }
-  const s={
+  var s={
     id:Date.now(),timestamp:Date.now(),
-    photos,fair:fair||'ChinaPlas 2026',
+    photos:photos,fair:fair||'ChinaPlas 2026',
     date:todayISO(),dayNum:getDayNum(),
-    priority,visitAgain,
-    sample:sampleOn,
-    sample_ref:document.getElementById('sample-ref').value,
+    priority:priority,visitAgain:visitAgain,
+    sample:sampleOn,sample_ref:document.getElementById('sample-ref').value,
     samplePhoto:samplePhotoData,
     voiceTranscript:transcript,
     textNote:document.getElementById('text-note').value.trim(),
     processed:false,status:'New',
     company:'',contact_name:'',phone:'',wechat_id:'',wechat_name:'',
-    email:'',website:'',category:'',products:'',
-    hall_booth:'',moq:'',price_range:'',notes:'',buyer_notes:''
+    email:'',category:'',products:'',hall_booth:'',moq:'',price_range:'',notes:'',buyer_notes:''
   };
   try{
-    const all=getSuppliers();
+    var all=getSuppliers();
     all.unshift(s);
     localStorage.setItem(SK,JSON.stringify(all));
     showToast('Zapisano ✓  Następny →');
     renderHome();
-    setTimeout(()=>showCapture(),700);
+    setTimeout(function(){showCapture();},700);
   }catch(e){
-    // Storage full — try without sample photo
     try{
       s.samplePhoto=null;
-      const all=getSuppliers();
-      all.unshift(s);
-      localStorage.setItem(SK,JSON.stringify(all));
-      showToast('Zapisano (bez zdjęcia próbki — mało miejsca)');
+      s.photos=s.photos.map(function(p){return{base64:'',dataUrl:'',type:'image/jpeg'};});
+      var all2=getSuppliers();all2.unshift(s);
+      localStorage.setItem(SK,JSON.stringify(all2));
+      showToast('Zapisano (brak miejsca na zdjęcia)');
       renderHome();
-      setTimeout(()=>showCapture(),700);
-    }catch(e2){
-      showToast('Brak miejsca! Przetwórz dostawców wieczorem.');
-    }
+      setTimeout(function(){showCapture();},700);
+    }catch(e2){showToast('Brak miejsca! Przetwórz i zarchiwizuj dostawców.');}
   }
 }
 
-// BATCH PROCESSING
 function startBatchProcess(){
-  const cfg=getSettings();
+  var cfg=getSettings();
   if(!cfg.apiKey){showToast('Dodaj klucz API w Ustawieniach');showScreen('screen-settings');return;}
-  processingQueue=getSuppliers().filter(s=>!s.processed);
+  processingQueue=getSuppliers().filter(function(s){return !s.processed;});
   if(!processingQueue.length){showToast('Wszystko już przetworzone!');return;}
   processingIdx=0;processingActive=true;resultQueue=[];
   showScreen('screen-processing');
@@ -784,98 +723,97 @@ function startBatchProcess(){
 function cancelProcessing(){
   processingActive=false;
   renderHome();showScreen('screen-home');
-  if(resultQueue.length) startReview();
+  if(resultQueue.length){resultIdx=0;showResultForReview(resultQueue[0]);}
 }
 
-async function processNext(){
+function processNext(){
   if(!processingActive||processingIdx>=processingQueue.length){
     processingActive=false;
     if(resultQueue.length){resultIdx=0;showResultForReview(resultQueue[0]);}
     else{renderHome();showScreen('screen-home');}
     return;
   }
-  const s=processingQueue[processingIdx];
+  var s=processingQueue[processingIdx];
   document.getElementById('proc-fair').textContent=s.fair||'ChinaPlas 2026';
   document.getElementById('proc-progress').textContent=(processingIdx+1)+' of '+processingQueue.length;
-  const steps=['Czytam zdjęcia…','Wyodrębniam kontakty…','Identyfikuję produkty…','Prawie gotowe…'];
-  let si=0;
-  const lbl=document.getElementById('proc-label');
+  var steps=['Czytam zdjęcia…','Wyodrębniam kontakty…','Identyfikuję produkty…','Prawie gotowe…'];
+  var si=0;
+  var lbl=document.getElementById('proc-label');
   lbl.textContent=steps[0];
-  const iv=setInterval(()=>{lbl.textContent=steps[Math.min(++si,steps.length-1)];},2000);
-  try{
-    const cfg=getSettings();
-    const content=[];
-    (s.photos||[]).forEach(p=>content.push({type:'image',source:{type:'base64',media_type:p.type||'image/jpeg',data:p.base64}}));
-    const d=s.dayNum?' Day '+s.dayNum:'';
-    var prompt = 'You are analysing photos from ' + (s.fair||'a trade fair') + ' in China (' + today() + d + ').\n';
-    prompt += 'Extract all supplier info. Buyer notes may be in Polish.\n';
-    prompt += 'Return ONLY valid JSON:\n';
-    prompt += '{"company":"","contact_name":"","phone":"","wechat_id":"","wechat_name":"","email":"","website":"","category":"","products":"","hall_booth":"","moq":"","price_range":"","notes":"","buyer_notes":""}\n';
-    prompt += '- wechat_id: from text on card OR decoded from WeChat QR code in photos\n';
-    prompt += '- category: one of: ' + CATS.join(', ') + '\n';
-    prompt += '- hall_booth: hall and booth number if visible\n';
-    prompt += '- notes: factual info from photos only\n';
-    prompt += '- buyer_notes: leave empty, will be filled from voice note\n';
-    if(s.voiceTranscript) prompt += '\nBuyer voice note (Polish): ' + s.voiceTranscript;
-    if(s.textNote) prompt += '\nBuyer text note: ' + s.textNote;
-    prompt += '\nReturn only the JSON.';
-    content.push({type:'text',text:prompt});
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':cfg.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,messages:[{role:'user',content}]})
-    });
+  var iv=setInterval(function(){lbl.textContent=steps[Math.min(++si,steps.length-1)];},2000);
+  var cfg=getSettings();
+  var content=[];
+  (s.photos||[]).forEach(function(p){content.push({type:'image',source:{type:'base64',media_type:p.type||'image/jpeg',data:p.base64}});});
+  var d=s.dayNum?' Day '+s.dayNum:'';
+  var prompt='You are analysing photos from '+(s.fair||'a trade fair')+' in China ('+today()+d+').\n';
+  prompt+='Extract all supplier info. Buyer notes may be in Polish.\n';
+  prompt+='Return ONLY valid JSON:\n';
+  prompt+='{"company":"","contact_name":"","phone":"","wechat_id":"","wechat_name":"","email":"","category":"","products":"","hall_booth":"","moq":"","price_range":"","notes":""}\n';
+  prompt+='- wechat_id: from text on card OR decoded from WeChat QR code in photos\n';
+  prompt+='- category: one of: '+CATS.join(', ')+'\n';
+  prompt+='- hall_booth: hall and booth number if visible\n';
+  prompt+='- notes: factual info from photos only\n';
+  if(s.voiceTranscript)prompt+='\nBuyer voice note (Polish): '+s.voiceTranscript;
+  if(s.textNote)prompt+='\nBuyer text note: '+s.textNote;
+  prompt+='\nReturn only the JSON.';
+  content.push({type:'text',text:prompt});
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':cfg.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,messages:[{role:'user',content:content}]})
+  }).then(function(resp){return resp.json();}).then(function(data){
     clearInterval(iv);
-    const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
-    const ex=JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    // Combine buyer voice + text notes, keep separate from AI notes
-    const buyerNotes = [s.voiceTranscript, s.textNote].filter(Boolean).join(' | ');
-    const updated={...s,...ex,processed:true,buyer_notes:buyerNotes};
+    var raw=data.content[0].text.replace(/```json|```/g,'').trim();
+    var ex=JSON.parse(raw);
+    var buyerNotes=[s.voiceTranscript,s.textNote].filter(Boolean).join(' | ');
+    var updated=Object.assign({},s,ex,{processed:true,buyer_notes:buyerNotes});
     updateSupplier(updated);
     resultQueue.push(updated);
-  }catch(err){
+    processingIdx++;
+    setTimeout(processNext,500);
+  }).catch(function(err){
     clearInterval(iv);
-    updateSupplier({...s,processed:true,notes:(s.notes||'')+'[Error: '+err.message+']'});
-  }
-  processingIdx++;
-  setTimeout(processNext,500);
+    updateSupplier(Object.assign({},s,{processed:true,notes:'[Error: '+err.message+']'}));
+    processingIdx++;
+    setTimeout(processNext,500);
+  });
 }
-
-function startReview(){resultIdx=0;if(resultQueue.length)showResultForReview(resultQueue[0]);}
 
 function showResultForReview(s){
   document.getElementById('result-title').textContent=s.company||'Review';
   document.getElementById('result-counter').textContent=(resultIdx+1)+'/'+resultQueue.length;
   currentResult=s;
-  document.getElementById('result-photos').innerHTML=(s.photos||[]).map(p=>
-    '<div class="result-photo"><img src="'+p.dataUrl+'"></div>').join('');
-  document.getElementById('result-fields').innerHTML=
-    '<div class="result-field"><div class="result-field-label">Status</div>'+
-    '<select class="editable" id="field-status">'+
-    '<option value="New">New</option><option value="Sampling">Sampling</option>'+
-    '<option value="Ordered">Ordered</option><option value="Pass">Pass</option>'+
-    '</select></div>'+
-    '<div class="result-field"><div class="result-field-label">Priority</div>'+
-    '<select class="editable" id="field-priority">'+
-    '<option value="Standard" '+(( s.priority||'Standard')==='Standard'?'selected':'')+'>Standard</option>'+
-    '<option value="Interesting" '+(s.priority==='Interesting'?'selected':'')+'>⭐⭐ Interesting</option>'+
-    '<option value="Must" '+(s.priority==='Must'?'selected':'')+'>⭐⭐⭐ Must</option>'+
-    '</select></div>'+
-    FIELDS.map(f=>'<div class="result-field"><div class="result-field-label">'+f.l+'</div>'+
-    '<input class="editable" id="field-'+f.k+'" value="'+(s[f.k]||'').replace(/"/g,'&quot;')+'" placeholder="—"></div>').join('');
+  document.getElementById('result-photos').innerHTML=(s.photos||[]).map(function(p){
+    return '<div class="result-photo"><img src="'+p.dataUrl+'"></div>';
+  }).join('');
+  var html='<div class="result-field"><div class="result-field-label">Status</div>';
+  html+='<select class="editable" id="field-status">';
+  html+='<option value="New">New</option><option value="Sampling">Sampling</option><option value="Ordered">Ordered</option><option value="Pass">Pass</option>';
+  html+='</select></div>';
+  html+='<div class="result-field"><div class="result-field-label">Priority</div>';
+  html+='<select class="editable" id="field-priority">';
+  html+='<option value="Standard"'+(( s.priority||'Standard')==='Standard'?' selected':'')+'>Standard</option>';
+  html+='<option value="Interesting"'+(s.priority==='Interesting'?' selected':'')+'>Interesting</option>';
+  html+='<option value="Must"'+(s.priority==='Must'?' selected':'')+'>Must</option>';
+  html+='</select></div>';
+  FIELDS.forEach(function(f){
+    html+='<div class="result-field"><div class="result-field-label">'+f.l+'</div>';
+    html+='<input class="editable" id="field-'+f.k+'" value="'+(s[f.k]||'').replace(/"/g,'&quot;')+'" placeholder="—"></div>';
+  });
+  document.getElementById('result-fields').innerHTML=html;
   showScreen('screen-result');
 }
 
 function confirmResult(){
   if(!currentResult)return;
-  const updated={...currentResult,
-    status:document.getElementById('field-status')?.value||'New',
-    priority:document.getElementById('field-priority')?.value||'Standard'
-  };
-  FIELDS.forEach(f=>{updated[f.k]=document.getElementById('field-'+f.k)?.value||'';});
+  var updated=Object.assign({},currentResult,{
+    status:document.getElementById('field-status').value||'New',
+    priority:document.getElementById('field-priority').value||'Standard'
+  });
+  FIELDS.forEach(function(f){updated[f.k]=document.getElementById('field-'+f.k)?.value||'';});
   updateSupplier(updated);
-  if(updated.company) showWeChatPrompt(updated);
+  if(updated.company)showWeChatPrompt(updated);
   nextResult();
 }
 
@@ -883,306 +821,336 @@ function skipResult(){nextResult();}
 
 function nextResult(){
   resultIdx++;
-  if(resultIdx<resultQueue.length) showResultForReview(resultQueue[resultIdx]);
+  if(resultIdx<resultQueue.length)showResultForReview(resultQueue[resultIdx]);
   else{renderHome();showScreen('screen-home');showToast('Wszystko przejrzane! ✓');}
 }
 
-// WECHAT
 function showWeChatPrompt(s){
-  const remark=(s.company||'Supplier')+' - '+(s.fair||'Fair')+(s.dayNum?' D'+s.dayNum:'');
+  var remark=(s.company||'Supplier')+' - '+(s.fair||'Fair')+(s.dayNum?' D'+s.dayNum:'');
   document.getElementById('wechat-remark-text').textContent=remark;
-  navigator.clipboard?.writeText(remark).catch(()=>{});
+  navigator.clipboard&&navigator.clipboard.writeText(remark).catch(function(){});
   document.getElementById('wechat-prompt').classList.add('show');
 }
 function closeWeChatPrompt(){document.getElementById('wechat-prompt').classList.remove('show');}
-function openWeChatApp(){closeWeChatPrompt();window.location.href='weixin://';setTimeout(()=>showToast('Otwórz WeChat ręcznie jeśli nie otworzyło się'),1500);}
+function openWeChatApp(){closeWeChatPrompt();window.location.href='weixin://';setTimeout(function(){showToast('Otwórz WeChat ręcznie jeśli nie otworzyło się');},1500);}
 
-// HOME
 function setFilter(el){
-  document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.fpill').forEach(function(p){p.classList.remove('active');});
   el.classList.add('active');filterMode=el.dataset.filter;renderHome();
 }
 
-function renderHome(){
-  const all=getSuppliers();const td=todayISO();
-  const unprocessed=all.filter(s=>!s.processed);
-  document.getElementById('st-total').textContent=all.length;
-  document.getElementById('st-today').textContent=all.filter(s=>s.date===td).length;
-  document.getElementById('st-must').textContent=all.filter(s=>s.priority==='Must').length;
-  document.getElementById('st-samples').textContent=all.filter(s=>s.sample).length;
-  const banner=document.getElementById('process-banner');
-  if(unprocessed.length>0){
+function getStorageSize(){
+  try{return (new Blob([localStorage.getItem(SK)||'[]']).size/1024).toFixed(0);}catch(e){return'?';}
+}
+
+function updateArchiveBanner(){
+  var all=getSuppliers();
+  var processed=all.filter(function(s){return s.processed&&!s.archived;});
+  var banner=document.getElementById('archive-banner');
+  var sub=document.getElementById('archive-sub');
+  if(!banner)return;
+  if(processed.length>0){
     banner.style.display='flex';
-    document.getElementById('pb-sub').textContent=unprocessed.length+' supplier'+(unprocessed.length!==1?'s':'')+' waiting';
-  } else banner.style.display='none';
+    if(sub)sub.textContent=processed.length+' processed · '+getStorageSize()+'KB used · tap to free space';
+  } else {
+    banner.style.display='none';
+  }
+}
 
-  const q=(document.getElementById('search-input')?.value||'').toLowerCase();
-  let filtered=all;
-  if(filterMode==='unprocessed') filtered=filtered.filter(s=>!s.processed);
-  else if(filterMode==='must') filtered=filtered.filter(s=>s.priority==='Must');
-  else if(filterMode==='visit') filtered=filtered.filter(s=>s.visitAgain);
-  else if(filterMode==='sampling') filtered=filtered.filter(s=>s.status==='Sampling');
-  else if(filterMode==='chinaplas') filtered=filtered.filter(s=>(s.fair||'').includes('ChinaPlas'));
-  else if(filterMode==='canton') filtered=filtered.filter(s=>(s.fair||'').includes('Canton'));
-  if(q) filtered=filtered.filter(s=>[s.company,s.contact_name,s.category,s.products,s.wechat_id,s.hall_booth].join(' ').toLowerCase().includes(q));
-
-  const list=document.getElementById('supplier-list');
-  if(!filtered.length){list.innerHTML='<div class="empty-state">No suppliers found.</div>';return;}
-  list.innerHTML=filtered.map(s=>{
-    const thumb=s.photos?.[0]?'<img src="'+s.photos[0].dataUrl+'">':(s.processed?'📋':'📷');
-    const isRaw=!s.processed;
-    const pri=priorityEmoji(s.priority);
-    return'<div class="supplier-card'+(isRaw?' unprocessed':'')+'" id="scard-'+s.id+'" onclick="viewSupplier('+s.id+')">'+
-    '<div class="delete-bg"><span>Delete</span></div>'+
-    '<div class="card-thumb">'+thumb+'</div>'+
-    '<div class="card-body">'+
-    '<div class="card-top">'+
-    '<div class="card-name">'+(isRaw?'[Raw] '+(s.voiceTranscript?'🎙 ':'')+s.fair:s.company||'Unknown company')+'</div>'+
-    '<div class="card-badges">'+(pri?'<span style="font-size:11px">'+pri+'</span>':'')+
-    (isRaw?'<span class="pill pill-raw">Raw</span>':'<span class="pill '+pillClass(s.status)+'">'+( s.status||'New')+'</span>')+
-    (s.visitAgain?'<span style="font-size:13px">📍</span>':'')+
-    '</div></div>'+
-    '<div class="card-meta">'+(isRaw?((s.photos?.length||0)+' photos · '+(s.voiceTranscript?'voice note':'no voice')):[s.contact_name,s.category,s.hall_booth].filter(Boolean).join(' · '))+'</div>'+
-    (s.category&&!isRaw?'<span class="card-cat">'+s.category+'</span>':'')+
-    '<div class="card-footer">'+
-    '<span>'+(s.fair||'')+'</span>'+
-    '<span>'+fmtDate(s.date)+'</span>'+
-    (s.dayNum?'<span>Day '+s.dayNum+'</span>':'')+
-    (s.sample?'<span style="color:var(--green)">Sample ✓</span>':'')+
-    (s.archived?'<span style="color:var(--dim)">Archived</span>':'')+
-    '</div>'+
-    (!isRaw&&(s.wechat_id||s.phone||s.email)?
-    '<div class="quick-actions" onclick="event.stopPropagation()">'+
-    (s.wechat_id?'<button class="qa-btn" onclick="copyText(\''+s.wechat_id+'\',\'WeChat ID\')">WeChat</button>':'')+
-    (s.phone?'<button class="qa-btn" onclick="openWhatsApp(\''+s.phone+'\')">WhatsApp</button>':'')+
-    (s.email?'<button class="qa-btn" onclick="openEmail(\''+s.email+'\',\''+( s.company||'')+'\')">Email</button>':'')+
-    '</div>':'')+
-    '</div></div>';
-  }).join('');
-
+function archiveProcessed(){
+  var all=getSuppliers();
+  var processed=all.filter(function(s){return s.processed&&!s.archived;});
+  if(!processed.length){showToast('Nothing to archive');return;}
+  if(!confirm('Remove full photos from '+processed.length+' processed suppliers? Thumbnails stay. Text stays.'))return;
+  processed.forEach(function(s){
+    if(s.photos&&s.photos.length>0){
+      s.photos=s.photos.map(function(p){return {base64:'',dataUrl:p.dataUrl?p.dataUrl.substring(0,100):'',type:'image/jpeg',archived:true};});
+    }
+    s.samplePhoto=null;
+    s.archived=true;
+  });
+  localStorage.setItem(SK,JSON.stringify(all));
+  showToast('Archived! '+getStorageSize()+'KB remaining');
   updateArchiveBanner();
+  renderHome();
+}
 
-  // Attach swipe
-  filtered.forEach(s=>{
-    const el=document.getElementById('scard-'+s.id);
-    if(el) attachSwipe(el,s.id);
+function renderHome(){
+  var all=getSuppliers();
+  var td=todayISO();
+  var unprocessed=all.filter(function(s){return !s.processed;});
+  document.getElementById('st-total').textContent=all.length;
+  document.getElementById('st-today').textContent=all.filter(function(s){return s.date===td;}).length;
+  document.getElementById('st-must').textContent=all.filter(function(s){return s.priority==='Must';}).length;
+  document.getElementById('st-samples').textContent=all.filter(function(s){return s.sample;}).length;
+  var banner=document.getElementById('process-banner');
+  if(unprocessed.length>0){banner.style.display='flex';document.getElementById('pb-sub').textContent=unprocessed.length+' waiting';}
+  else banner.style.display='none';
+  updateArchiveBanner();
+  var q=(document.getElementById('search-input').value||'').toLowerCase();
+  var filtered=all;
+  if(filterMode==='unprocessed')filtered=filtered.filter(function(s){return !s.processed;});
+  else if(filterMode==='must')filtered=filtered.filter(function(s){return s.priority==='Must';});
+  else if(filterMode==='visit')filtered=filtered.filter(function(s){return s.visitAgain;});
+  else if(filterMode==='sampling')filtered=filtered.filter(function(s){return s.status==='Sampling';});
+  else if(filterMode==='chinaplas')filtered=filtered.filter(function(s){return (s.fair||'').includes('ChinaPlas');});
+  else if(filterMode==='canton')filtered=filtered.filter(function(s){return (s.fair||'').includes('Canton');});
+  if(q)filtered=filtered.filter(function(s){return [s.company,s.contact_name,s.category,s.products,s.wechat_id,s.hall_booth].join(' ').toLowerCase().includes(q);});
+  var list=document.getElementById('supplier-list');
+  if(!filtered.length){list.innerHTML='<div class="empty-state">No suppliers found.</div>';return;}
+  var html='';
+  filtered.forEach(function(s){
+    var thumb=s.photos&&s.photos[0]&&s.photos[0].dataUrl&&!s.photos[0].archived?'<img src="'+s.photos[0].dataUrl+'">':'📷';
+    var isRaw=!s.processed;
+    var pri=priorityEmoji(s.priority);
+    html+='<div class="supplier-card'+(isRaw?' unprocessed':'')+'" id="scard-'+s.id+'" onclick="viewSupplier('+s.id+')">';
+    html+='<div class="delete-bg"><span>Delete</span></div>';
+    html+='<div class="card-thumb">'+thumb+'</div>';
+    html+='<div class="card-body">';
+    html+='<div class="card-top"><div class="card-name">'+(isRaw?'[Raw] '+s.fair:s.company||'Unknown')+'</div>';
+    html+='<div class="card-badges">'+(pri?'<span style="font-size:11px">'+pri+'</span>':'');
+    html+=(isRaw?'<span class="pill pill-raw">Raw</span>':'<span class="pill '+pillClass(s.status)+'">'+(s.status||'New')+'</span>');
+    html+=(s.visitAgain?'<span style="font-size:13px">📍</span>':'')+'</div></div>';
+    html+='<div class="card-meta">'+(isRaw?((s.photos&&s.photos.length||0)+' photos'):([s.contact_name,s.category,s.hall_booth].filter(Boolean).join(' · ')))+'</div>';
+    if(s.category&&!isRaw)html+='<span class="card-cat">'+s.category+'</span>';
+    html+='<div class="card-footer"><span>'+(s.fair||'')+'</span><span>'+fmtDate(s.date)+'</span>';
+    if(s.dayNum)html+='<span>Day '+s.dayNum+'</span>';
+    if(s.sample)html+='<span style="color:var(--green)">Sample ✓</span>';
+    html+='</div>';
+    if(!isRaw&&(s.wechat_id||s.phone||s.email)){
+      html+='<div class="quick-actions" onclick="event.stopPropagation()">';
+      if(s.wechat_id)html+='<button class="qa-btn" onclick="copyText(\''+s.wechat_id+'\',\'WeChat ID\')">WeChat</button>';
+      if(s.phone)html+='<button class="qa-btn" onclick="openWhatsApp(\''+s.phone+'\')">WhatsApp</button>';
+      if(s.email)html+='<button class="qa-btn" onclick="openEmail(\''+s.email+'\',\''+( s.company||'')+'\')">Email</button>';
+      html+='</div>';
+    }
+    html+='</div></div>';
+  });
+  list.innerHTML=html;
+  filtered.forEach(function(s){
+    var el=document.getElementById('scard-'+s.id);
+    if(el)attachSwipe(el,s.id);
   });
 }
 
-// SWIPE TO DELETE
 function attachSwipe(el,id){
-  let sx=0,cx=0;
-  el.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;cx=0;el.style.transition='none';},{passive:true});
-  el.addEventListener('touchmove',e=>{
-    const dx=e.touches[0].clientX-sx;
+  var sx=0,cx=0;
+  el.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;cx=0;el.style.transition='none';},{passive:true});
+  el.addEventListener('touchmove',function(e){
+    var dx=e.touches[0].clientX-sx;
     if(dx<0){cx=Math.max(dx,-90);el.style.transform='translateX('+cx+'px)';}
   },{passive:true});
-  el.addEventListener('touchend',()=>{
+  el.addEventListener('touchend',function(){
     el.style.transition='transform .2s';
     if(cx<-60){
       el.style.transform='translateX(-90px)';
-      setTimeout(()=>{
+      setTimeout(function(){
         if(confirm('Delete this supplier?')){
-          localStorage.setItem(SK,JSON.stringify(getSuppliers().filter(x=>x.id!==id)));
+          localStorage.setItem(SK,JSON.stringify(getSuppliers().filter(function(x){return x.id!==id;})));
           renderHome();showToast('Deleted');
-        } else {el.style.transform='';}
+        } else el.style.transform='';
       },150);
     } else el.style.transform='';
   },{passive:true});
 }
 
 function copyText(text,label){
-  navigator.clipboard?.writeText(text).then(()=>showToast((label||'Text')+' copied: '+text));
+  navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){showToast((label||'Text')+' copied: '+text);});
 }
 function openWhatsApp(phone){window.open('https://wa.me/'+phone.replace(/\D/g,''),'_blank');}
 function openEmail(email,company){window.open('mailto:'+email+'?subject=Follow up - '+encodeURIComponent(company),'_blank');}
 
 function viewSupplier(id){
   viewId=id;
-  const s=getSuppliers().find(x=>x.id===id);
+  var s=getSuppliers().find(function(x){return x.id===id;});
   if(!s)return;
   if(!s.processed){
-    if(confirm('Ten dostawca nie został przetworzony przez AI. Przetworzyć teraz?')){
+    if(confirm('Przetworzyć przez AI teraz?')){
       processingQueue=[s];processingIdx=0;processingActive=true;resultQueue=[];
       showScreen('screen-processing');processNext();
     }
     return;
   }
   document.getElementById('detail-name').textContent=s.company||'Supplier';
-  let hero='<div class="detail-hero-empty">No photos</div>',strip='';
-  if(s.photos?.length){
+  var hero='<div class="detail-hero-empty">No photos</div>',strip='';
+  if(s.photos&&s.photos.length&&s.photos[0].dataUrl&&!s.photos[0].archived){
     hero='<div class="detail-hero"><img id="hero-img" src="'+s.photos[0].dataUrl+'"></div>';
-    if(s.photos.length>1) strip='<div class="mini-strip">'+s.photos.map((p,i)=>
-      '<div class="mini-thumb '+(i===0?'sel':'')+'" onclick="swapHero(this,\''+p.dataUrl+'\')"><img src="'+p.dataUrl+'"></div>').join('')+'</div>';
+    if(s.photos.length>1){
+      strip='<div class="mini-strip">';
+      s.photos.forEach(function(p,i){
+        if(!p.archived)strip+='<div class="mini-thumb'+(i===0?' sel':'')+'" onclick="swapHero(this,\''+p.dataUrl+'\')"><img src="'+p.dataUrl+'"></div>';
+      });
+      strip+='</div>';
+    }
   }
   document.getElementById('detail-hero-zone').innerHTML=hero+strip;
-
-  const actions='<div class="detail-actions">'+
-    (s.wechat_id?'<div class="detail-action" onclick="copyText(\''+s.wechat_id+'\',\'WeChat ID\')"><div class="detail-action-icon">💬</div><div class="detail-action-label">WeChat</div></div>':'')+
-    (s.phone?'<div class="detail-action" onclick="openWhatsApp(\''+s.phone+'\')"><div class="detail-action-icon">📱</div><div class="detail-action-label">WhatsApp</div></div>':'')+
-    (s.email?'<div class="detail-action" onclick="openEmail(\''+s.email+'\',\''+( s.company||'')+'\')"><div class="detail-action-icon">✉️</div><div class="detail-action-label">Email</div></div>':'')+
-    '<div class="detail-action" onclick="draftEmail('+id+')"><div class="detail-action-icon">🤖</div><div class="detail-action-label">Draft email</div></div>'+
-    '<div class="detail-action" onclick="editSupplier('+id+')"><div class="detail-action-icon">✏️</div><div class="detail-action-label">Edit</div></div>'+
-    '<div class="detail-action" onclick="showWeChatPrompt(getSuppliers().find(x=>x.id==='+id+'))"><div class="detail-action-icon">📋</div><div class="detail-action-label">WeChat remark</div></div>'+
-    '</div>';
-
-  const overview='<div class="detail-section"><div class="detail-section-title">Overview</div>'+
-    '<div class="detail-field"><div class="detail-field-label">Priority</div><div class="detail-field-val">'+(priorityEmoji(s.priority)||'')+' '+(s.priority||'Standard')+'</div></div>'+
-    '<div class="detail-field"><div class="detail-field-label">Status</div><div class="detail-field-val"><span class="pill '+pillClass(s.status)+'">'+(s.status||'New')+'</span></div></div>'+
-    '<div class="detail-field"><div class="detail-field-label">Fair</div><div class="detail-field-val">'+(s.fair||'')+(s.dayNum?' · Day '+s.dayNum:'')+' · '+fmtDate(s.date)+'</div></div>'+
-    (s.visitAgain?'<div class="detail-field"><div class="detail-field-label">Visit again</div><div class="detail-field-val" style="color:var(--green)">📍 Marked</div></div>':'')+
-    (s.sample?'<div class="detail-field"><div class="detail-field-label">Sample</div><div class="detail-field-val" style="color:var(--green)">✓ Taken'+(s.sample_ref?' — '+s.sample_ref:'')+'</div>'+(s.samplePhoto?'<img src="'+s.samplePhoto.dataUrl+'" style="width:100%;height:130px;object-fit:cover;border-radius:10px;margin-top:8px">':'')+'</div>':'')+
-    '</div>';
-
-  const contacts='<div class="detail-section"><div class="detail-section-title">Contact & products</div>'+
-    FIELDS.filter(f=>s[f.k]).map(f=>'<div class="detail-field"><div class="detail-field-label">'+f.l+'</div><div class="detail-field-val">'+s[f.k]+'</div></div>').join('')+
-    '</div>';
-
+  var actions='<div class="detail-actions">';
+  if(s.wechat_id)actions+='<div class="detail-action" onclick="copyText(\''+s.wechat_id+'\',\'WeChat ID\')"><div class="detail-action-icon">💬</div><div class="detail-action-label">WeChat</div></div>';
+  if(s.phone)actions+='<div class="detail-action" onclick="openWhatsApp(\''+s.phone+'\')"><div class="detail-action-icon">📱</div><div class="detail-action-label">WhatsApp</div></div>';
+  if(s.email)actions+='<div class="detail-action" onclick="openEmail(\''+s.email+'\',\''+( s.company||'')+'\')"><div class="detail-action-icon">✉️</div><div class="detail-action-label">Email</div></div>';
+  actions+='<div class="detail-action" onclick="draftEmail('+id+')"><div class="detail-action-icon">🤖</div><div class="detail-action-label">Draft email</div></div>';
+  actions+='<div class="detail-action" onclick="editSupplier('+id+')"><div class="detail-action-icon">✏️</div><div class="detail-action-label">Edit</div></div>';
+  actions+='<div class="detail-action" onclick="showWeChatPrompt(getSuppliers().find(function(x){return x.id==='+id+';}))"><div class="detail-action-icon">📋</div><div class="detail-action-label">WeChat</div></div>';
+  actions+='</div>';
+  var overview='<div class="detail-section"><div class="detail-section-title">Overview</div>';
+  overview+='<div class="detail-field"><div class="detail-field-label">Priority</div><div class="detail-field-val">'+(priorityEmoji(s.priority)||'')+' '+(s.priority||'Standard')+'</div></div>';
+  overview+='<div class="detail-field"><div class="detail-field-label">Status</div><div class="detail-field-val"><span class="pill '+pillClass(s.status)+'">'+(s.status||'New')+'</span></div></div>';
+  overview+='<div class="detail-field"><div class="detail-field-label">Fair</div><div class="detail-field-val">'+(s.fair||'')+(s.dayNum?' · Day '+s.dayNum:'')+' · '+fmtDate(s.date)+'</div></div>';
+  if(s.visitAgain)overview+='<div class="detail-field"><div class="detail-field-label">Visit again</div><div class="detail-field-val" style="color:var(--green)">📍 Marked</div></div>';
+  if(s.sample)overview+='<div class="detail-field"><div class="detail-field-label">Sample</div><div class="detail-field-val" style="color:var(--green)">✓ Taken'+(s.sample_ref?' — '+s.sample_ref:'')+'</div></div>';
+  overview+='</div>';
+  var contacts='<div class="detail-section"><div class="detail-section-title">Contact & products</div>';
+  FIELDS.filter(function(f){return s[f.k];}).forEach(function(f){
+    contacts+='<div class="detail-field"><div class="detail-field-label">'+f.l+'</div><div class="detail-field-val">'+s[f.k]+'</div></div>';
+  });
+  contacts+='</div>';
   document.getElementById('detail-body').innerHTML=actions+overview+contacts+'<div id="email-draft-area"></div>';
   showScreen('screen-detail');
 }
 
-async function draftEmail(id){
-  const s=getSuppliers().find(x=>x.id===id);if(!s)return;
-  const cfg=getSettings();if(!cfg.apiKey){showToast('Add API key in Settings');return;}
+function draftEmail(id){
+  var s=getSuppliers().find(function(x){return x.id===id;});if(!s)return;
+  var cfg=getSettings();if(!cfg.apiKey){showToast('Add API key in Settings');return;}
   showToast('Drafting email…');
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':cfg.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-opus-4-6',max_tokens:500,messages:[{role:'user',content:'Write a short professional follow-up email from Damian to this supplier met at '+( s.fair||'the fair')+'. Company: '+(s.company||'')+', Contact: '+(s.contact_name||'')+', Products: '+(s.products||'')+', MOQ: '+(s.moq||'')+', Notes: '+(s.notes||'')+'. Under 120 words, friendly and professional. Include subject line.'}]})
-    });
-    const data=await resp.json();
-    const draft=data.content[0].text;
-    document.getElementById('email-draft-area').innerHTML=
-      '<div class="detail-section"><div class="detail-section-title">AI email draft</div>'+
-      '<div style="background:var(--surface2);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">'+draft+'</div>'+
-      '<button class="ghost-btn" style="margin-top:8px" onclick="navigator.clipboard?.writeText('+JSON.stringify(draft)+').then(()=>showToast(\'Copied!\'))">Copy</button></div>';
-  }catch(e){showToast('Error: '+e.message);}
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':cfg.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-opus-4-6',max_tokens:500,messages:[{role:'user',content:'Write a short professional follow-up email from Damian to this supplier met at '+(s.fair||'the fair')+'. Company: '+(s.company||'')+', Contact: '+(s.contact_name||'')+', Products: '+(s.products||'')+', MOQ: '+(s.moq||'')+', Notes: '+(s.notes||'')+'. Under 120 words, friendly and professional. Include subject line.'}]})
+  }).then(function(r){return r.json();}).then(function(data){
+    var draft=data.content[0].text;
+    document.getElementById('email-draft-area').innerHTML='<div class="detail-section"><div class="detail-section-title">AI email draft</div><div style="background:var(--surface2);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">'+draft+'</div><button type="button" class="ghost-btn" style="margin-top:8px" onclick="navigator.clipboard&&navigator.clipboard.writeText('+JSON.stringify(draft)+').then(function(){showToast(\'Copied!\');})">Copy</button></div>';
+  }).catch(function(e){showToast('Error: '+e.message);});
 }
 
 function swapHero(el,src){
   document.getElementById('hero-img').src=src;
-  document.querySelectorAll('.mini-thumb').forEach(m=>m.classList.remove('sel'));
+  document.querySelectorAll('.mini-thumb').forEach(function(m){m.classList.remove('sel');});
   el.classList.add('sel');
 }
 
 function editSupplier(id){
-  const s=getSuppliers().find(x=>x.id===id);if(!s)return;
+  var s=getSuppliers().find(function(x){return x.id===id;});if(!s)return;
   currentResult=s;resultQueue=[s];resultIdx=0;showResultForReview(s);
 }
 
 function deleteSupplier(){
   if(!confirm('Delete this supplier?'))return;
-  localStorage.setItem(SK,JSON.stringify(getSuppliers().filter(x=>x.id!==viewId)));
+  localStorage.setItem(SK,JSON.stringify(getSuppliers().filter(function(x){return x.id!==viewId;})));
   renderHome();showScreen('screen-home');showToast('Deleted');
 }
 
-// NOTION SYNC
 async function syncToNotion(){
-  const cfg=getSettings();
+  var cfg=getSettings();
   if(!cfg.notionKey||!cfg.notionDb){
-    alert('No Notion keys found. Go to Settings and save them first.');
+    if(confirm('Notion keys not set. Open Settings?'))showScreen('screen-settings');
     return;
   }
-  const all=getSuppliers();
-  const processed=all.filter(s=>s.processed);
-  const toSync=all.filter(s=>s.processed&&!s.notionSynced);
-  
-  alert('Total suppliers: '+all.length+' | Processed: '+processed.length+' | To sync: '+toSync.length);
-  
-  if(!processed.length){alert('No processed suppliers. Process with AI first.');return;}
-  if(!toSync.length){alert('All already synced to Notion!');return;}
-  
+  var all=getSuppliers();
+  var toSync=all.filter(function(s){return s.processed&&!s.notionSynced;});
+  if(!toSync.length){
+    var total=all.filter(function(s){return s.notionSynced;}).length;
+    showToast(total?'All synced! '+total+' in Notion.':'No processed suppliers yet.');
+    return;
+  }
   showToast('Syncing '+toSync.length+' to Notion…');
-  let ok=0, fail=0;
-  for(const s of toSync){
+  var cleanDb=cfg.notionDb.replace(/-/g,'').trim();
+  var ok=0,fail=0;
+  for(var i=0;i<toSync.length;i++){
+    var s=toSync[i];
     try{
-      const cleanDbId = cfg.notionDb.replace(/-/g,'').trim();
-      const props = {
+      var props={
         'Company':{title:[{text:{content:s.company||'Unknown'}}]},
         'Contact':{rich_text:[{text:{content:s.contact_name||''}}]},
         'Fair':{rich_text:[{text:{content:s.fair||''}}]},
-        'Notes':{rich_text:[{text:{content:s.notes||''}}]},
-        'Products':{rich_text:[{text:{content:s.products||''}}]},
+        'Notes':{rich_text:[{text:{content:(s.notes||'').substring(0,1900)}}]},
+        'Products':{rich_text:[{text:{content:(s.products||'').substring(0,1900)}}]},
         'MOQ':{rich_text:[{text:{content:s.moq||''}}]},
         'Price range':{rich_text:[{text:{content:s.price_range||''}}]},
         'Hall & Booth':{rich_text:[{text:{content:s.hall_booth||''}}]},
         'WeChat ID':{rich_text:[{text:{content:s.wechat_id||''}}]},
+        'WeChat display name':{rich_text:[{text:{content:s.wechat_name||''}}]},
         'Sample ref':{rich_text:[{text:{content:s.sample_ref||''}}]},
-        'Website':{rich_text:[{text:{content:s.website||''}}]},
+        'Sample':{checkbox:!!s.sample},
       };
-      if(s.email) props['Email']={email:s.email};
-      if(s.phone) props['Phone']={phone_number:s.phone};
-      if(s.category) props['Category']={select:{name:s.category}};
-      if(s.status) props['Status']={select:{name:s.status}};
-      if(s.priority) props['Priority']={select:{name:s.priority}};
-      if(s.date) props['Date']={date:{start:s.date}};
-      if(s.sample!==undefined) props['Sample']={checkbox:!!s.sample};
-
-      const r = await fetch('https://notion-proxy-ruddy.vercel.app/api/notion?path=pages',{
+      if(s.email)props['Email']={email:s.email};
+      if(s.phone)props['Phone']={phone_number:s.phone};
+      if(s.category)props['Category']={select:{name:s.category}};
+      if(s.status)props['Status']={select:{name:s.status}};
+      if(s.priority)props['Priority']={select:{name:s.priority}};
+      if(s.date)props['Date']={date:{start:s.date}};
+      var r=await fetch(PROXY+'/api/notion?path=pages',{
         method:'POST',
-        headers:{
-          'Authorization':'Bearer '+cfg.notionKey,
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify({parent:{database_id:cleanDbId},properties:props})
+        headers:{'Authorization':'Bearer '+cfg.notionKey,'Content-Type':'application/json'},
+        body:JSON.stringify({parent:{database_id:cleanDb},properties:props})
       });
-      const d = await r.json();
+      var d=await r.json();
       if(d.id){
-        s.notionSynced=true;
-        updateSupplier(s);
-        ok++;
+        s.notionSynced=true;updateSupplier(s);ok++;
       } else {
-        alert('Notion error: '+(d.message||d.code||JSON.stringify(d).substring(0,100)));
-        fail++;
-        break;
+        showToast('Error: '+(d.message||d.code||'Unknown Notion error'));
+        fail++;break;
       }
-    }catch(e){
-      alert('Network error: '+e.message);
-      fail++;
-      break;
+    } catch(e){
+      showToast('Network error: '+e.message);
+      fail++;break;
     }
   }
-  if(fail===0) showToast('Synced '+ok+' suppliers to Notion!');
+  if(fail===0)showToast('Synced '+ok+' suppliers to Notion!');
 }
 
-// SUMMARY
+async function testNotionConnection(){
+  var cfg=getSettings();
+  var key=document.getElementById('notion-key-input').value.trim()||cfg.notionKey;
+  var db=document.getElementById('notion-db-input').value.trim()||cfg.notionDb;
+  if(!key){alert('Enter your Notion integration key first');return;}
+  if(!db){alert('Enter your Notion database ID first');return;}
+  showToast('Testing…');
+  try{
+    var cleanDb=db.replace(/-/g,'').trim();
+    var resp=await fetch(PROXY+'/api/notion?path=databases/'+cleanDb,{
+      headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'}
+    });
+    var data=await resp.json();
+    if(data.id){
+      var name=data.title&&data.title[0]?data.title[0].plain_text:'OK';
+      alert('Connected! Database: '+name);
+    } else {
+      alert('Failed: '+(data.message||data.code||JSON.stringify(data).substring(0,150)));
+    }
+  } catch(e){
+    alert('Error: '+e.message);
+  }
+}
+
 function showSummary(){
-  const all=getSuppliers();const td=todayISO();
-  const ts=all.filter(s=>s.date===td);
-  const d=getDayNum();
+  var all=getSuppliers();var td=todayISO();
+  var ts=all.filter(function(s){return s.date===td;});
+  var d=getDayNum();
   document.getElementById('summary-title').textContent=d?'Day '+d+' summary':"Today's summary";
-  const cats={};ts.forEach(s=>{if(s.category)cats[s.category]=(cats[s.category]||0)+1;});
-  const topCats=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>k+' ('+v+')').join(', ')||'—';
-  document.getElementById('summary-content').innerHTML=
-    '<div class="summary-stat"><span class="summary-stat-label">Today</span><span class="summary-stat-val">'+ts.length+'</span></div>'+
-    '<div class="summary-stat"><span class="summary-stat-label">Must contact</span><span class="summary-stat-val">'+ts.filter(s=>s.priority==='Must').length+'</span></div>'+
-    '<div class="summary-stat"><span class="summary-stat-label">Interesting</span><span class="summary-stat-val">'+ts.filter(s=>s.priority==='Interesting').length+'</span></div>'+
-    '<div class="summary-stat"><span class="summary-stat-label">Samples taken</span><span class="summary-stat-val">'+ts.filter(s=>s.sample).length+'</span></div>'+
-    '<div class="summary-stat"><span class="summary-stat-label">Visit again</span><span class="summary-stat-val">'+ts.filter(s=>s.visitAgain).length+'</span></div>'+
-    '<div class="summary-stat"><span class="summary-stat-label">Unprocessed</span><span class="summary-stat-val">'+all.filter(s=>!s.processed).length+'</span></div>'+
-    '<div class="summary-stat"><span class="summary-stat-label">Total all days</span><span class="summary-stat-val">'+all.length+'</span></div>'+
-    '<div class="summary-stat"><span class="summary-stat-label">Top categories</span><span class="summary-stat-val" style="font-size:13px;font-family:\'DM Sans\'">'+topCats+'</span></div>';
+  var cats={};
+  ts.forEach(function(s){if(s.category)cats[s.category]=(cats[s.category]||0)+1;});
+  var topCats=Object.entries(cats).sort(function(a,b){return b[1]-a[1];}).slice(0,3).map(function(e){return e[0]+' ('+e[1]+')';}).join(', ')||'—';
+  var html='';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Today</span><span class="summary-stat-val">'+ts.length+'</span></div>';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Must contact</span><span class="summary-stat-val">'+ts.filter(function(s){return s.priority==='Must';}).length+'</span></div>';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Interesting</span><span class="summary-stat-val">'+ts.filter(function(s){return s.priority==='Interesting';}).length+'</span></div>';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Samples</span><span class="summary-stat-val">'+ts.filter(function(s){return s.sample;}).length+'</span></div>';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Visit again</span><span class="summary-stat-val">'+ts.filter(function(s){return s.visitAgain;}).length+'</span></div>';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Unprocessed</span><span class="summary-stat-val">'+all.filter(function(s){return !s.processed;}).length+'</span></div>';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Total all days</span><span class="summary-stat-val">'+all.length+'</span></div>';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Storage</span><span class="summary-stat-val" style="font-size:16px;font-family:\'DM Sans\'">'+getStorageSize()+'KB</span></div>';
+  html+='<div class="summary-stat"><span class="summary-stat-label">Top categories</span><span class="summary-stat-val" style="font-size:13px;font-family:\'DM Sans\'">'+topCats+'</span></div>';
+  document.getElementById('summary-content').innerHTML=html;
   document.getElementById('summary-modal').classList.add('show');
 }
+
 function closeSummary(e){
   if(!e||e.target===document.getElementById('summary-modal'))
     document.getElementById('summary-modal').classList.remove('show');
 }
 
-// SETTINGS
-function getSettings(){try{return JSON.parse(localStorage.getItem(SK2))||{};}catch{return{};}}
-function getSuppliers(){try{return JSON.parse(localStorage.getItem(SK))||[];}catch{return[];}}
-function updateSupplier(s){
-  const all=getSuppliers();
-  const idx=all.findIndex(x=>x.id===s.id);
-  if(idx>=0)all[idx]=s;else all.unshift(s);
-  localStorage.setItem(SK,JSON.stringify(all));
-}
-
 function saveSettings(){
-  const k=document.getElementById('api-key-input').value.trim();
+  var k=document.getElementById('api-key-input').value.trim();
   if(!k){showToast('Please enter your Claude API key');return;}
   localStorage.setItem(SK2,JSON.stringify({
     apiKey:k,
@@ -1195,131 +1163,33 @@ function saveSettings(){
 }
 
 function toggleShow(inputId,btn){
-  const input=document.getElementById(inputId);
+  var input=document.getElementById(inputId);
   input.type=input.type==='password'?'text':'password';
   btn.textContent=input.type==='password'?'Show':'Hide';
 }
 
 function clearAllData(){
-  if(confirm('Delete ALL suppliers? This cannot be undone.')){
-    localStorage.removeItem(SK);
-    renderHome();showToast('All data cleared');
-  }
-}
-
-// EXPORT
-function getStorageSize(){
-  try{
-    const data = localStorage.getItem(SK)||'[]';
-    return (new Blob([data]).size / 1024).toFixed(0);
-  }catch(e){return '?';}
-}
-
-function updateArchiveBanner(){
-  const all = getSuppliers();
-  const processed = all.filter(s=>s.processed&&!s.archived);
-  const banner = document.getElementById('archive-banner');
-  const sub = document.getElementById('archive-sub');
-  if(!banner) return;
-  if(processed.length > 0){
-    banner.style.display='flex';
-    const kb = getStorageSize();
-    if(sub) sub.textContent = processed.length+' processed suppliers · '+kb+'KB used · tap to free space';
-  } else {
-    banner.style.display='none';
-  }
-}
-
-function archiveProcessed(){
-  const all = getSuppliers();
-  const processed = all.filter(s=>s.processed&&!s.archived);
-  if(!processed.length){showToast('Nothing to archive');return;}
-  
-  if(!confirm('Remove full photos from '+processed.length+' processed suppliers? Thumbnails stay. Text data stays. This frees up storage.')){return;}
-
-  let freed = 0;
-  processed.forEach(s=>{
-    const before = JSON.stringify(s.photos||[]).length;
-    // Keep only tiny thumbnails (max 200px)
-    if(s.photos&&s.photos.length>0){
-      s.photos = s.photos.map(p=>{
-        try{
-          const img = new Image();
-          const canvas = document.createElement('canvas');
-          img.src = p.dataUrl;
-          const MAX = 200;
-          let w=img.width||200, h=img.height||200;
-          if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
-          canvas.width=w;canvas.height=h;
-          canvas.getContext('2d').drawImage(img,0,0,w,h);
-          const thumb = canvas.toDataURL('image/jpeg',0.5);
-          return {base64:thumb.split(',')[1],dataUrl:thumb,type:'image/jpeg',archived:true};
-        }catch(e){
-          return {...p,archived:true};
-        }
-      });
-    }
-    if(s.samplePhoto) s.samplePhoto=null;
-    s.archived=true;
-    freed += before - JSON.stringify(s.photos||[]).length;
-  });
-
-  localStorage.setItem(SK, JSON.stringify(all));
-  const savedKB = Math.max(0, Math.round(freed/1024));
-  showToast('Archived! ~'+savedKB+'KB freed · '+getStorageSize()+'KB remaining');
-  updateArchiveBanner();
-  renderHome();
-}
-
-async function testNotionConnection(){
-  const cfg = getSettings();
-  const key = document.getElementById('notion-key-input').value.trim() || cfg.notionKey;
-  const db = document.getElementById('notion-db-input').value.trim() || cfg.notionDb;
-  
-  if(!key){alert('Please enter your Notion integration key first');return;}
-  if(!db){alert('Please enter your Notion database ID first');return;}
-  
-  showToast('Testing…');
-  
-  try{
-    const cleanDb = db.replace(/-/g,'').trim();
-    const resp = await fetch('https://notion-proxy-ruddy.vercel.app/api/notion?path=databases/' + cleanDb, {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer ' + key,
-        'Content-Type': 'application/json'
-      }
-    });
-    const data = await resp.json();
-    console.log('Notion test response:', JSON.stringify(data));
-    if(data.id){
-      const name = data.title && data.title[0] ? data.title[0].plain_text : 'Unknown';
-      alert('Connected! Database: ' + name + ' ID: ' + data.id.substring(0,8)+'...');
-    } else {
-      alert('Connection failed: ' + (data.message || data.code || JSON.stringify(data)));
-    }
-  } catch(e){
-    alert('Error: ' + e.message);
-    console.error('Notion test error:', e);
+  if(confirm('Delete ALL suppliers? Cannot be undone.')){
+    localStorage.removeItem(SK);renderHome();showToast('All data cleared');
   }
 }
 
 function exportCSV(){
-  const all=getSuppliers();
+  var all=getSuppliers();
   if(!all.length){showToast('No suppliers to export');return;}
-  const headers=['Company','Contact','Phone','WeChat ID','WeChat Name','Email','Website','Category','Products','Hall/Booth','MOQ','Price','Notes','Status','Priority','Sample','Sample Ref','Fair','Date','Day','Visit Again','Processed','Notion Synced'];
-  const keys=['company','contact_name','phone','wechat_id','wechat_name','email','website','category','products','hall_booth','moq','price_range','notes','status','priority','sample','sample_ref','fair','date','dayNum','visitAgain','processed','notionSynced'];
-  const rows=all.map(s=>keys.map(k=>'"'+String(s[k]===undefined?'':s[k]).replace(/"/g,'""')+'"').join(','));
-  const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([headers.join(','),...rows].join('\n'));
+  var headers=['Company','Contact','Phone','WeChat ID','WeChat Name','Email','Category','Products','Hall/Booth','MOQ','Price','Notes','Your Notes','Status','Priority','Sample','Sample Ref','Fair','Date','Day','Visit Again','Processed','Notion Synced'];
+  var keys=['company','contact_name','phone','wechat_id','wechat_name','email','category','products','hall_booth','moq','price_range','notes','buyer_notes','status','priority','sample','sample_ref','fair','date','dayNum','visitAgain','processed','notionSynced'];
+  var rows=all.map(function(s){return keys.map(function(k){return '"'+String(s[k]===undefined?'':s[k]).replace(/"/g,'""')+'"';}).join(',');});
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([headers.join(',')].concat(rows).join('\n'));
   a.download='damian-suppliers-'+todayISO()+'.csv';
   a.click();showToast('CSV exported');
 }
 
 function showToast(msg){
-  const t=document.getElementById('toast');
+  var t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+  setTimeout(function(){t.classList.remove('show');},2500);
 }
 
 init();
