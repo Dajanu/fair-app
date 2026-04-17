@@ -364,19 +364,12 @@ input[type=password]:focus{border-color:var(--accent)}
         Photos
         <span class="field-badge" id="photo-badge" style="display:none"></span>
       </div>
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <button onclick="startQRScan()" style="flex:1;padding:11px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:var(--rsm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
-          <span style="font-size:16px">&#x2317;</span> Scan WeChat QR
-        </button>
-        <div id="wechat-scanned-badge" style="display:none;flex:1;padding:11px;background:#eaf7f0;border:1px solid #b8e8ce;border-radius:var(--rsm);font-family:'DM Mono',monospace;font-size:11px;color:var(--green);display:flex;align-items:center;justify-content:center;gap:4px">
-          ✓ WeChat scanned
-        </div>
-      </div>
+
       <div class="photo-zone" id="photo-zone">
         <input type="file" id="photo-input" accept="image/*" multiple capture="environment" onchange="handlePhotos(this)">
         <div class="photo-zone-icon">📷</div>
         <div class="photo-zone-text">Tap to take photos</div>
-        <div class="photo-zone-sub">Business card · booth sign · products</div>
+        <div class="photo-zone-sub">Business card · booth · products · WeChat QR</div>
       </div>
       <div class="photo-grid" id="photo-grid"></div>
     </div>
@@ -804,7 +797,7 @@ Extract all supplier information. Return ONLY valid JSON:
 
 Rules:
 - company: full name from card or booth sign
-- wechat_id: the @ID or handle printed on card (not the QR code itself)
+- wechat_id: extract from text on card OR decode from any WeChat QR code visible in photos
 - wechat_name: WeChat display name if different from contact name
 - category: MUST be one of: ${CATS.join(', ')}
 - products: specific product names visible
