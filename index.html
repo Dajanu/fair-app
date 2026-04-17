@@ -1237,49 +1237,58 @@ let qrStream = null;
 let qrInterval = null;
 let scannedWeChat = null;
 
-async function startQRScan(){
-  const overlay = document.getElementById('qr-overlay');
-  overlay.classList.add('show');
-  document.getElementById('qr-label').innerHTML = 'Point at WeChat QR code<br>on business card or phone';
-  try {
-    qrStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});
-    const video = document.getElementById('qr-video');
-    video.srcObject = qrStream;
-    await video.play();
+function startQRScan(){
+  // Use iPhone native image picker — tap photo, iPhone reads QR natively
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.capture = 'environment';
+  input.style.display = 'none';
+  document.body.appendChild(input);
 
-    // Create offscreen canvas for jsQR
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+  input.onchange = async function(){
+    const file = input.files[0];
+    if(!file){ document.body.removeChild(input); return; }
+    showToast('Reading QR code...');
 
-    // Update label to show camera is active
-    document.getElementById('qr-label').innerHTML = 'Camera ready — point at QR code';
+    // Use canvas + jsQR to decode the captured image
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      document.body.removeChild(input);
 
-    function scanFrame(){
-      if(!qrStream){ return; }
-      if(video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0){
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        try {
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const code = jsQR(imageData.data, imageData.width, imageData.height, {
-            inversionAttempts: 'attemptBoth'
-          });
-          if(code && code.data){
-            handleQRResult(code.data);
-            return;
-          }
-        } catch(e){ console.log('jsQR error:', e); }
+      try {
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: 'attemptBoth'
+        });
+        if(code && code.data){
+          handleQRResult(code.data);
+        } else {
+          // jsQR failed — show manual entry
+          showManualWeChatEntry();
+        }
+      } catch(e){
+        showManualWeChatEntry();
       }
-      qrInterval = requestAnimationFrame(scanFrame);
-    }
-    // Small delay to let camera warm up
-    setTimeout(()=>{ qrInterval = requestAnimationFrame(scanFrame); }, 500);
+    };
+    img.onerror = ()=>{ document.body.removeChild(input); showManualWeChatEntry(); };
+    img.src = url;
+  };
 
-  } catch(e){
-    showToast('Camera access denied');
-    stopQRScan();
-  }
+  input.oncancel = ()=>{ document.body.removeChild(input); };
+  input.click();
+}
+
+function showManualWeChatEntry(){
+  const id = prompt('Could not read QR code automatically.\nType WeChat ID manually:');
+  if(id && id.trim()) handleQRResult(id.trim());
 }
 
 function handleQRResult(val){
@@ -1315,7 +1324,8 @@ function handleQRResult(val){
 function stopQRScan(){
   if(qrInterval){ cancelAnimationFrame(qrInterval); qrInterval=null; }
   if(qrStream){ qrStream.getTracks().forEach(t=>t.stop()); qrStream=null; }
-  document.getElementById('qr-overlay').classList.remove('show');
+  const overlay = document.getElementById('qr-overlay');
+  if(overlay) overlay.classList.remove('show');
 }
 
 // WECHAT PROMPT after saving
