@@ -1080,37 +1080,36 @@ function deleteSupplier(){
 
 // NOTION SYNC
 async function syncToNotion(){
-  alert('Sync button tapped! Starting...');
   const cfg=getSettings();
   if(!cfg.notionKey||!cfg.notionDb){
-    if(confirm('Notion keys not set. Open Settings to add them?')){showScreen('screen-settings');}
+    alert('No Notion keys found. Go to Settings and save them first.');
     return;
   }
   const all=getSuppliers();
   const processed=all.filter(s=>s.processed);
   const toSync=all.filter(s=>s.processed&&!s.notionSynced);
   
-  if(!processed.length){showToast('No processed suppliers yet. Process first.');return;}
-  if(!toSync.length){showToast('All synced already! '+processed.length+' in Notion.');return;}
+  alert('Total suppliers: '+all.length+' | Processed: '+processed.length+' | To sync: '+toSync.length);
+  
+  if(!processed.length){alert('No processed suppliers. Process with AI first.');return;}
+  if(!toSync.length){alert('All already synced to Notion!');return;}
   
   showToast('Syncing '+toSync.length+' to Notion…');
-  console.log('Syncing:', toSync.length, 'suppliers');
-  let ok=0,fail=0;
+  let ok=0, fail=0;
   for(const s of toSync){
     try{
-      console.log('Syncing supplier:', s.company, 'to DB:', cfg.notionDb);
-      const props={
-        'Company':{title:[{text:{content:s.company||''}}]},
+      const cleanDbId = cfg.notionDb.replace(/-/g,'').trim();
+      const props = {
+        'Company':{title:[{text:{content:s.company||'Unknown'}}]},
         'Contact':{rich_text:[{text:{content:s.contact_name||''}}]},
-        'WeChat ID':{rich_text:[{text:{content:s.wechat_id||''}}]},
-        'WeChat display name':{rich_text:[{text:{content:s.wechat_name||''}}]},
+        'Fair':{rich_text:[{text:{content:s.fair||''}}]},
+        'Notes':{rich_text:[{text:{content:s.notes||''}}]},
         'Products':{rich_text:[{text:{content:s.products||''}}]},
-        'Hall & Booth':{rich_text:[{text:{content:s.hall_booth||''}}]},
         'MOQ':{rich_text:[{text:{content:s.moq||''}}]},
         'Price range':{rich_text:[{text:{content:s.price_range||''}}]},
-        'Notes':{rich_text:[{text:{content:s.notes||''}}]},
+        'Hall & Booth':{rich_text:[{text:{content:s.hall_booth||''}}]},
+        'WeChat ID':{rich_text:[{text:{content:s.wechat_id||''}}]},
         'Sample ref':{rich_text:[{text:{content:s.sample_ref||''}}]},
-        'Fair':{rich_text:[{text:{content:s.fair||''}}]},
         'Website':{rich_text:[{text:{content:s.website||''}}]},
       };
       if(s.email) props['Email']={email:s.email};
@@ -1120,29 +1119,32 @@ async function syncToNotion(){
       if(s.priority) props['Priority']={select:{name:s.priority}};
       if(s.date) props['Date']={date:{start:s.date}};
       if(s.sample!==undefined) props['Sample']={checkbox:!!s.sample};
-      const cleanDbId = cfg.notionDb.replace(/-/g,'').trim();
-      console.log('Posting to Notion DB:', cleanDbId);
-      const r=await fetch('https://notion-proxy-ruddy.vercel.app/api/notion?path=pages',{
+
+      const r = await fetch('https://notion-proxy-ruddy.vercel.app/api/notion?path=pages',{
         method:'POST',
-        headers:{'Authorization':'Bearer '+cfg.notionKey,'Content-Type':'application/json'},
+        headers:{
+          'Authorization':'Bearer '+cfg.notionKey,
+          'Content-Type':'application/json'
+        },
         body:JSON.stringify({parent:{database_id:cleanDbId},properties:props})
       });
-      const d=await r.json();
+      const d = await r.json();
       if(d.id){
-        s.notionSynced=true;updateSupplier(s);ok++;
-        console.log('Synced OK:', s.company, 'page ID:', d.id);
+        s.notionSynced=true;
+        updateSupplier(s);
+        ok++;
       } else {
-        console.error('Notion error for '+s.company+':', JSON.stringify(d));
-        showToast('Notion error: '+(d.message||d.code||'check console'));
+        alert('Notion error: '+(d.message||d.code||JSON.stringify(d).substring(0,100)));
         fail++;
+        break;
       }
     }catch(e){
+      alert('Network error: '+e.message);
       fail++;
-      console.error('Sync exception:', e);
-      showToast('Sync error: '+e.message);
+      break;
     }
   }
-  showToast(fail===0?'✓ '+ok+' synced to Notion':ok+' synced, '+fail+' failed');
+  if(fail===0) showToast('Synced '+ok+' suppliers to Notion!');
 }
 
 // SUMMARY
