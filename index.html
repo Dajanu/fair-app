@@ -1251,24 +1251,30 @@ async function startQRScan(){
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
+    // Update label to show camera is active
+    document.getElementById('qr-label').innerHTML = 'Camera ready — point at QR code';
+
     function scanFrame(){
-      if(!qrStream) return;
-      if(video.readyState === video.HAVE_ENOUGH_DATA){
+      if(!qrStream){ return; }
+      if(video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0){
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         try {
-          const code = jsQR(imageData.data, imageData.width, imageData.height, {inversionAttempts:'dontInvert'});
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: 'attemptBoth'
+          });
           if(code && code.data){
             handleQRResult(code.data);
             return;
           }
-        } catch(e){}
+        } catch(e){ console.log('jsQR error:', e); }
       }
       qrInterval = requestAnimationFrame(scanFrame);
     }
-    qrInterval = requestAnimationFrame(scanFrame);
+    // Small delay to let camera warm up
+    setTimeout(()=>{ qrInterval = requestAnimationFrame(scanFrame); }, 500);
 
   } catch(e){
     showToast('Camera access denied');
@@ -1278,23 +1284,32 @@ async function startQRScan(){
 
 function handleQRResult(val){
   stopQRScan();
-  // WeChat QR codes look like: wxp://... or weixin://dl/... or https://u.wechat.com/...
-  // Extract ID from various formats
-  let wechatId = val;
-  if(val.includes('weixin://dl/chat?')) wechatId = val.split('weixin://dl/chat?')[1];
-  else if(val.includes('u.wechat.com')) wechatId = val; // keep URL
-  else if(val.startsWith('wxp://')) wechatId = val;
-  
+  if(!val) return;
+
+  // Show raw value so Damian can see what was scanned
+  console.log('QR raw value:', val);
+
+  // WeChat QR codes come in several formats:
+  // wxp://f2f_xxxxxxx  (personal QR)
+  // weixin://dl/chat?xxxxxx
+  // https://u.wechat.com/xxxxxxx
+  // Just a plain WeChat ID text on card
+  let wechatId = val.trim();
+
+  // Store full raw value — most useful for opening WeChat
   scannedWeChat = wechatId;
-  // Update the wechat_id field if on result screen, or store for later
+
+  // Update field if visible
   const field = document.getElementById('field-wechat_id');
   if(field) field.value = wechatId;
-  
+
   // Show badge
   const badge = document.getElementById('wechat-scanned-badge');
   if(badge){ badge.style.display='flex'; }
-  
-  showToast('WeChat QR scanned!');
+
+  // Show what was scanned — shortened for display
+  const display = wechatId.length > 40 ? wechatId.substring(0,40)+'...' : wechatId;
+  showToast('Scanned: ' + display);
 }
 
 function stopQRScan(){
