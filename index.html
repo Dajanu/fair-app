@@ -274,7 +274,7 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
       </div>
       <button class="pb-btn">Process now →</button>
     </div>
-    <div id="archive-banner" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;display:none;align-items:center;justify-content:space-between;gap:12px">
+    <div id="archive-banner" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:12px">
       <div>
         <div style="font-weight:500;font-size:15px">Free up space</div>
         <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px" id="archive-sub">Archive photos from processed suppliers</div>
@@ -807,18 +807,18 @@ async function processNext(){
     const content=[];
     (s.photos||[]).forEach(p=>content.push({type:'image',source:{type:'base64',media_type:p.type||'image/jpeg',data:p.base64}}));
     const d=s.dayNum?' Day '+s.dayNum:'';
-    let prompt=`You are analysing photos from ${s.fair||'a trade fair'} in China (${today()}${d}).
-Extract all supplier info. Buyer notes may be in Polish.
-Return ONLY valid JSON:
-{"company":"","contact_name":"","phone":"","wechat_id":"","wechat_name":"","email":"","website":"","category":"","products":"","hall_booth":"","moq":"","price_range":"","notes":"","buyer_notes":""}
-- wechat_id: from text on card OR decoded from WeChat QR code in photos
-- category: one of: ${CATS.join(', ')}
-- hall_booth: hall and booth number if visible
-- notes: ONLY factual info extracted from photos/signs (products seen, booth info, etc.)
-Do NOT put buyer voice notes in the notes field — those go in buyer_notes separately`;
-    if(s.voiceTranscript) prompt+='\n\nBuyer voice note (Polish - translate key info to buyer_notes field): "'+s.voiceTranscript+'"';
-    if(s.textNote) prompt+='\n\nBuyer text note: "'+s.textNote+'"';
-    prompt+='\nReturn only the JSON.';
+    var prompt = 'You are analysing photos from ' + (s.fair||'a trade fair') + ' in China (' + today() + d + ').\n';
+    prompt += 'Extract all supplier info. Buyer notes may be in Polish.\n';
+    prompt += 'Return ONLY valid JSON:\n';
+    prompt += '{"company":"","contact_name":"","phone":"","wechat_id":"","wechat_name":"","email":"","website":"","category":"","products":"","hall_booth":"","moq":"","price_range":"","notes":"","buyer_notes":""}\n';
+    prompt += '- wechat_id: from text on card OR decoded from WeChat QR code in photos\n';
+    prompt += '- category: one of: ' + CATS.join(', ') + '\n';
+    prompt += '- hall_booth: hall and booth number if visible\n';
+    prompt += '- notes: factual info from photos only\n';
+    prompt += '- buyer_notes: leave empty, will be filled from voice note\n';
+    if(s.voiceTranscript) prompt += '\nBuyer voice note (Polish): ' + s.voiceTranscript;
+    if(s.textNote) prompt += '\nBuyer text note: ' + s.textNote;
+    prompt += '\nReturn only the JSON.';
     content.push({type:'text',text:prompt});
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -1226,7 +1226,7 @@ function archiveProcessed(){
   const processed = all.filter(s=>s.processed&&!s.archived);
   if(!processed.length){showToast('Nothing to archive');return;}
   
-  if(!confirm('Remove full photos from '+processed.length+' processed suppliers?\n\nThumbnails stay. Text data stays. Notion sync stays.\nThis frees up storage for new captures.')){return;}
+  if(!confirm('Remove full photos from '+processed.length+' processed suppliers? Thumbnails stay. Text data stays. This frees up storage.')){return;}
 
   let freed = 0;
   processed.forEach(s=>{
@@ -1285,12 +1285,9 @@ async function testNotionConnection(){
     console.log('Notion test response:', JSON.stringify(data));
     if(data.id){
       const name = data.title && data.title[0] ? data.title[0].plain_text : 'Unknown';
-      alert('✓ Connected!
-Database: ' + name + '
-ID: ' + data.id.substring(0,8)+'...');
+      alert('Connected! Database: ' + name + ' ID: ' + data.id.substring(0,8)+'...');
     } else {
-      alert('Connection failed:
-' + (data.message || data.code || JSON.stringify(data)));
+      alert('Connection failed: ' + (data.message || data.code || JSON.stringify(data)));
     }
   } catch(e){
     alert('Error: ' + e.message);
