@@ -457,6 +457,7 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
     <div class="settings-section">
       <div class="settings-section-title">Notion sync</div>
       <div class="api-note">Connect your Notion Suppliers database to sync processed suppliers.</div>
+      <button class="ghost-btn" style="margin-bottom:10px;margin-top:0" onclick="testNotionConnection()">Test connection →</button>
       <div class="settings-label">Notion integration key</div>
       <div style="position:relative">
         <input type="password" id="notion-key-input" placeholder="secret_…" style="padding-right:50px;margin-bottom:10px">
@@ -515,7 +516,8 @@ const FIELDS=[
   {k:'email',l:'Email'},{k:'website',l:'Website'},
   {k:'category',l:'Category'},{k:'products',l:'Products'},
   {k:'hall_booth',l:'Hall & booth'},{k:'moq',l:'MOQ'},
-  {k:'price_range',l:'Price range'},{k:'notes',l:'Notes'}
+  {k:'price_range',l:'Price range'},{k:'notes',l:'AI notes'},
+  {k:'buyer_notes',l:'Your notes'}
 ];
 
 const CATS=['Machinery','Plastic Additives','Raw Materials','Packaging','Chemicals','Molds & Tooling','Automation','Recycling','Testing Equipment','Accessories','Other'];
@@ -735,7 +737,7 @@ function saveRaw(){
     processed:false,status:'New',
     company:'',contact_name:'',phone:'',wechat_id:'',wechat_name:'',
     email:'',website:'',category:'',products:'',
-    hall_booth:'',moq:'',price_range:'',notes:''
+    hall_booth:'',moq:'',price_range:'',notes:'',buyer_notes:''
   };
   try{
     const all=getSuppliers();
@@ -800,12 +802,13 @@ async function processNext(){
     let prompt=`You are analysing photos from ${s.fair||'a trade fair'} in China (${today()}${d}).
 Extract all supplier info. Buyer notes may be in Polish.
 Return ONLY valid JSON:
-{"company":"","contact_name":"","phone":"","wechat_id":"","wechat_name":"","email":"","website":"","category":"","products":"","hall_booth":"","moq":"","price_range":"","notes":""}
+{"company":"","contact_name":"","phone":"","wechat_id":"","wechat_name":"","email":"","website":"","category":"","products":"","hall_booth":"","moq":"","price_range":"","notes":"","buyer_notes":""}
 - wechat_id: from text on card OR decoded from WeChat QR code in photos
 - category: one of: ${CATS.join(', ')}
 - hall_booth: hall and booth number if visible
-- notes: key info including any Polish voice note content translated to English`;
-    if(s.voiceTranscript) prompt+='\n\nBuyer voice note (Polish): "'+s.voiceTranscript+'"';
+- notes: ONLY factual info extracted from photos/signs (products seen, booth info, etc.)
+Do NOT put buyer voice notes in the notes field — those go in buyer_notes separately`;
+    if(s.voiceTranscript) prompt+='\n\nBuyer voice note (Polish - translate key info to buyer_notes field): "'+s.voiceTranscript+'"';
     if(s.textNote) prompt+='\n\nBuyer text note: "'+s.textNote+'"';
     prompt+='\nReturn only the JSON.';
     content.push({type:'text',text:prompt});
@@ -818,7 +821,9 @@ Return ONLY valid JSON:
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
     const ex=JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    const updated={...s,...ex,processed:true};
+    // Combine buyer voice + text notes, keep separate from AI notes
+    const buyerNotes = [s.voiceTranscript, s.textNote].filter(Boolean).join(' | ');
+    const updated={...s,...ex,processed:true,buyer_notes:buyerNotes};
     updateSupplier(updated);
     resultQueue.push(updated);
   }catch(err){
@@ -1077,6 +1082,7 @@ async function syncToNotion(){
   let ok=0,fail=0;
   for(const s of toSync){
     try{
+      console.log('Syncing supplier:', s.company, 'to DB:', cfg.notionDb);
       const props={
         'Company':{title:[{text:{content:s.company||''}}]},
         'Contact':{rich_text:[{text:{content:s.contact_name||''}}]},
@@ -1089,6 +1095,7 @@ async function syncToNotion(){
         'Notes':{rich_text:[{text:{content:s.notes||''}}]},
         'Sample ref':{rich_text:[{text:{content:s.sample_ref||''}}]},
         'Fair':{rich_text:[{text:{content:s.fair||''}}]},
+        'Website':{rich_text:[{text:{content:s.website||''}}]},
       };
       if(s.email) props['Email']={email:s.email};
       if(s.phone) props['Phone']={phone_number:s.phone};
@@ -1103,9 +1110,19 @@ async function syncToNotion(){
         body:JSON.stringify({parent:{database_id:cfg.notionDb},properties:props})
       });
       const d=await r.json();
-      if(d.id){s.notionSynced=true;updateSupplier(s);ok++;}
-      else{console.error('Notion error',d);fail++;}
-    }catch(e){fail++;console.error(e);}
+      if(d.id){
+        s.notionSynced=true;updateSupplier(s);ok++;
+        console.log('Synced OK:', s.company, 'page ID:', d.id);
+      } else {
+        console.error('Notion error for '+s.company+':', JSON.stringify(d));
+        showToast('Notion error: '+(d.message||d.code||'check console'));
+        fail++;
+      }
+    }catch(e){
+      fail++;
+      console.error('Sync exception:', e);
+      showToast('Sync error: '+e.message);
+    }
   }
   showToast(fail===0?'✓ '+ok+' synced to Notion':ok+' synced, '+fail+' failed');
 }
@@ -1171,6 +1188,30 @@ function clearAllData(){
 }
 
 // EXPORT
+async function testNotionConnection(){
+  const cfg=getSettings();
+  if(!cfg.notionKey||!cfg.notionDb){showToast('Add Notion keys first');return;}
+  showToast('Testing connection…');
+  try{
+    const r=await fetch('https://api.notion.com/v1/databases/'+cfg.notionDb,{
+      headers:{
+        'Authorization':'Bearer '+cfg.notionKey,
+        'Notion-Version':'2022-06-28'
+      }
+    });
+    const d=await r.json();
+    if(d.id){
+      showToast('✓ Connected! Database: '+(d.title?.[0]?.plain_text||'OK'));
+    } else {
+      showToast('Error: '+(d.message||d.code||'Connection failed'));
+      console.error('Notion test error:',JSON.stringify(d));
+    }
+  }catch(e){
+    showToast('Error: '+e.message);
+    console.error(e);
+  }
+}
+
 function exportCSV(){
   const all=getSuppliers();
   if(!all.length){showToast('No suppliers to export');return;}
