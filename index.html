@@ -1115,7 +1115,7 @@ async function syncToNotion(){
       if(s.priority) props['Priority']={select:{name:s.priority}};
       if(s.date) props['Date']={date:{start:s.date}};
       if(s.sample!==undefined) props['Sample']={checkbox:!!s.sample};
-      const r=await fetch('https://notion-proxy-ruddy.vercel.app/api/notion/pages',{
+      const r=await fetch('https://notion-proxy-ruddy.vercel.app/api/notion?path=pages',{
         method:'POST',
         headers:{'Authorization':'Bearer '+cfg.notionKey,'Content-Type':'application/json'},
         body:JSON.stringify({parent:{database_id:cfg.notionDb},properties:props})
@@ -1273,7 +1273,7 @@ async function testNotionConnection(){
   showToast('Testing…');
   
   try{
-    const resp = await fetch('https://notion-proxy-ruddy.vercel.app/api/notion/databases/'+db.replace(/-/g,''), {
+    const resp = await fetch('https://notion-proxy-ruddy.vercel.app/api/notion?path=databases/'+db.replace(/-/g,''), {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + key,
