@@ -555,6 +555,7 @@ input[type=password]:focus{border-color:var(--accent)}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script>
 const SK='damian_v4', SK2='damian_cfg_v4';
 let photos=[], result=null, recorder=null, chunks=[], recording=false, recog=null, transcript='', fair='ChinaPlas 2026', viewId=null, rating=0, priority='Standard', sampleOn=false, samplePhotoData=null, filterFair='all', filterStatus='';
@@ -1239,32 +1240,36 @@ let scannedWeChat = null;
 async function startQRScan(){
   const overlay = document.getElementById('qr-overlay');
   overlay.classList.add('show');
+  document.getElementById('qr-label').innerHTML = 'Point at WeChat QR code<br>on business card or phone';
   try {
-    qrStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    qrStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});
     const video = document.getElementById('qr-video');
     video.srcObject = qrStream;
     await video.play();
-    // Use BarcodeDetector if available (Chrome/Safari 17+)
-    if('BarcodeDetector' in window){
-      const detector = new BarcodeDetector({formats:['qr_code']});
-      qrInterval = setInterval(async()=>{
-        try{
-          const codes = await detector.detect(video);
-          if(codes.length > 0){
-            const val = codes[0].rawValue;
-            handleQRResult(val);
+
+    // Create offscreen canvas for jsQR
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function scanFrame(){
+      if(!qrStream) return;
+      if(video.readyState === video.HAVE_ENOUGH_DATA){
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        try {
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {inversionAttempts:'dontInvert'});
+          if(code && code.data){
+            handleQRResult(code.data);
+            return;
           }
-        }catch(e){}
-      }, 400);
-    } else {
-      // Fallback: show manual input
-      document.getElementById('qr-label').innerHTML = 'QR scanning not supported<br>in this browser.<br><br>Enter WeChat ID manually below:';
-      const inp = document.createElement('input');
-      inp.type='text'; inp.placeholder='WeChat ID...';
-      inp.style='margin-top:12px;padding:12px 16px;border-radius:10px;border:none;font-size:15px;width:240px;text-align:center';
-      inp.onkeydown = e => { if(e.key==='Enter' && inp.value) handleQRResult('weixin://dl/chat?'+inp.value); };
-      document.getElementById('qr-overlay').insertBefore(inp, document.querySelector('.qr-cancel'));
+        } catch(e){}
+      }
+      qrInterval = requestAnimationFrame(scanFrame);
     }
+    qrInterval = requestAnimationFrame(scanFrame);
+
   } catch(e){
     showToast('Camera access denied');
     stopQRScan();
@@ -1293,7 +1298,7 @@ function handleQRResult(val){
 }
 
 function stopQRScan(){
-  if(qrInterval){ clearInterval(qrInterval); qrInterval=null; }
+  if(qrInterval){ cancelAnimationFrame(qrInterval); qrInterval=null; }
   if(qrStream){ qrStream.getTracks().forEach(t=>t.stop()); qrStream=null; }
   document.getElementById('qr-overlay').classList.remove('show');
 }
