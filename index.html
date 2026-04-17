@@ -1065,7 +1065,12 @@ function deleteSupplier(){
 // NOTION SYNC
 async function syncToNotion(){
   const cfg=getSettings();
-  if(!cfg.notionKey||!cfg.notionDb){showToast('Add Notion keys in Settings');showScreen('screen-settings');return;}
+  if(!cfg.notionKey||!cfg.notionDb){
+    if(confirm('Notion keys not set. Open Settings to add them?')){
+      showScreen('screen-settings');
+    }
+    return;
+  }
   const toSync=getSuppliers().filter(s=>s.processed&&!s.notionSynced);
   if(!toSync.length){showToast('Nothing new to sync');return;}
   showToast('Syncing '+toSync.length+' suppliers…');
