@@ -33,6 +33,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 /* SCROLL */
 .scroll-body{flex:1;overflow-y:auto;padding:16px 16px 120px}
 
+/* SWIPE TO DELETE */
+.supplier-card{touch-action:pan-y;transition:transform .15s}
+.delete-bg{position:absolute;right:0;top:0;bottom:0;width:90px;background:var(--red);display:flex;align-items:center;justify-content:center;border-radius:0 var(--r) var(--r) 0}
+.delete-bg-label{color:#fff;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em}
+
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:8px 0 calc(env(safe-area-inset-bottom,0px)+8px);z-index:20}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 12px;border-radius:12px;transition:background .15s;color:var(--muted)}
@@ -233,6 +238,14 @@ select.editable{cursor:pointer;appearance:none}
 .summary-stat-label{font-size:14px;color:var(--muted)}
 .summary-stat-val{font-family:'Playfair Display',serif;font-size:22px;color:var(--text)}
 
+/* GOOGLE DRIVE */
+.gdrive-btn{width:100%;padding:14px;border-radius:var(--r);border:1.5px solid var(--border-dark);background:var(--surface);font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s;color:var(--text)}
+.gdrive-btn.connected{border-color:var(--green);background:#eaf7f0;color:var(--green)}
+.gdrive-btn.connecting{border-color:var(--amber);background:#fff8e6;color:var(--amber)}
+.gdrive-status{font-family:'DM Mono',monospace;font-size:11px;margin-top:8px;color:var(--muted)}
+.upload-indicator{position:fixed;top:calc(env(safe-area-inset-top,0px)+10px);right:10px;background:var(--accent);color:#fff;padding:6px 12px;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;z-index:999;display:none}
+.upload-indicator.show{display:block}
+
 /* SETTINGS */
 .settings-section{margin-bottom:26px}
 .settings-section-title{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:12px}
@@ -245,6 +258,8 @@ input[type=password]:focus,input[type=date]:focus,input[type=text]:focus{border-
 .toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+100px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:500;opacity:0;transition:opacity .25s,transform .25s;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://accounts.google.com/gsi/client"></script>
 </head>
 <body>
 
@@ -472,6 +487,20 @@ input[type=password]:focus,input[type=date]:focus,input[type=text]:focus{border-
     </div>
     <button class="primary-btn" style="margin-top:8px" onclick="saveSettings()">Save all settings</button>
     <div class="settings-section" style="margin-top:24px">
+      <div class="settings-section-title">Google Drive</div>
+      <div class="api-note">Photos upload automatically to Google Drive — organized by fair, day and supplier. No storage limits.</div>
+      <div class="settings-label">Google Client ID</div>
+      <div style="position:relative">
+        <input type="text" id="google-client-id" placeholder="xxxxxxxxx.apps.googleusercontent.com" style="padding-right:50px;margin-bottom:10px">
+        <button onclick="toggleShow('google-client-id',this)" style="position:absolute;right:12px;top:14px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
+      </div>
+      <button class="gdrive-btn" id="gdrive-btn" onclick="connectGoogleDrive()">
+        <span style="font-size:18px">&#x1F4C1;</span>
+        <span id="gdrive-btn-label">Connect Google Drive</span>
+      </button>
+      <div class="gdrive-status" id="gdrive-status"></div>
+    </div>
+    <div class="settings-section" style="margin-top:24px">
       <div class="settings-section-title">Export</div>
       <button class="ghost-btn" style="text-align:left" onclick="exportCSV()">Export all suppliers as CSV →</button>
     </div>
@@ -500,6 +529,7 @@ input[type=password]:focus,input[type=date]:focus,input[type=text]:focus{border-
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="upload-indicator" id="upload-indicator">Uploading to Drive...</div>
 
 <script>
 const SK='damian_v5', SK2='damian_cfg_v5';
@@ -544,6 +574,7 @@ function init(){
   const capDay=document.getElementById('capture-day-label');
   if(capDay&&d) capDay.textContent='Day '+d;
   renderHome();
+  initGDrive();
 }
 
 function showScreen(id){
@@ -731,6 +762,16 @@ function saveRaw(){
     localStorage.setItem(SK,JSON.stringify(all));
     showToast('Zapisano ✓ Następny dostawca →');
     renderHome();
+    // Upload to Google Drive in background
+    if(gdriveConnected){
+      uploadSupplierPhotosToDrive(s).then(driveInfo=>{
+        if(driveInfo){
+          s.driveFolder = driveInfo.folderPath;
+          s.driveFolderId = driveInfo.folderId;
+          updateSupplier(s);
+        }
+      });
+    }
     setTimeout(()=>showCapture(),600);
   } catch(e) {
     // Storage full - try saving without photos
@@ -984,7 +1025,8 @@ function renderHome(){
     const thumb=s.photos?.[0]?`<img src="${s.photos[0].dataUrl}">`:'📷';
     const priEmoji=priorityEmoji(s.priority);
     const isRaw=!s.processed;
-    return`<div class="supplier-card${isRaw?' unprocessed':''}" onclick="viewSupplier(${s.id})">
+    return`<div class="supplier-card${isRaw?' unprocessed':''}" id="scard-${s.id}" onclick="viewSupplier(${s.id})">
+      <div class="delete-bg"><span class="delete-bg-label">Delete</span></div>
       <div class="card-thumb">${thumb}</div>
       <div class="card-body">
         <div class="card-top">
@@ -1010,6 +1052,11 @@ function renderHome(){
         </div>`:''}
       </div></div>`;
   }).join('');
+  // Attach swipe handlers
+  filtered.forEach(s=>{
+    const el=document.getElementById('scard-'+s.id);
+    if(el) attachSwipe(el, s.id);
+  });
 }
 
 function copyWeChat(id){
@@ -1060,6 +1107,7 @@ function viewSupplier(id){
       <div class="detail-field"><div class="detail-field-label">Priority</div><div class="detail-field-val">${priorityEmoji(s.priority)||''} ${s.priority||'Standard'}</div></div>
       <div class="detail-field"><div class="detail-field-label">Status</div><div class="detail-field-val"><span class="pill ${pillClass(s.status)}">${s.status||'New'}</span></div></div>
       <div class="detail-field"><div class="detail-field-label">Fair</div><div class="detail-field-val">${s.fair||''}${s.dayNum?' · Day '+s.dayNum:''} · ${fmtDate(s.date)}</div></div>
+      ${s.driveFolder?`<div class="detail-field"><div class="detail-field-label">Google Drive</div><div class="detail-field-val" style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${s.driveFolder}</div></div>`:''}`
       ${s.visitAgain?'<div class="detail-field"><div class="detail-field-label">Visit again</div><div class="detail-field-val" style="color:var(--green)">📍 Marked to revisit</div></div>':''}
       ${s.sample?'<div class="detail-field"><div class="detail-field-label">Sample</div><div class="detail-field-val" style="color:var(--green)">Taken'+(s.sample_ref?' - '+s.sample_ref:'')+'</div></div>':''}
     </div>
@@ -1205,6 +1253,199 @@ function exportCSV(){
   a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([headers.join(','),...rows].join('\n'));
   a.download='damian-suppliers.csv';a.click();
   showToast('CSV exported');
+}
+
+// SWIPE TO DELETE
+let swipeStartX={}, swipeCurrentX={}, swipeId=null;
+
+function attachSwipe(el, id){
+  el.addEventListener('touchstart', e=>{
+    swipeId=id;
+    swipeStartX[id]=e.touches[0].clientX;
+    swipeCurrentX[id]=0;
+    el.style.transition='none';
+  },{passive:true});
+
+  el.addEventListener('touchmove', e=>{
+    if(swipeId!==id)return;
+    const dx=e.touches[0].clientX - swipeStartX[id];
+    if(dx<0){
+      swipeCurrentX[id]=Math.max(dx,-90);
+      el.style.transform='translateX('+swipeCurrentX[id]+'px)';
+    }
+  },{passive:true});
+
+  el.addEventListener('touchend', e=>{
+    if(swipeId!==id)return;
+    el.style.transition='transform .2s';
+    if(swipeCurrentX[id]<-60){
+      el.style.transform='translateX(-90px)';
+      setTimeout(()=>{
+        if(confirm('Delete this supplier?')){
+          const all=getSuppliers().filter(x=>x.id!==id);
+          localStorage.setItem(SK,JSON.stringify(all));
+          renderHome();
+          showToast('Deleted');
+        } else {
+          el.style.transform='';
+        }
+      },150);
+    } else {
+      el.style.transform='';
+    }
+    swipeId=null;
+  },{passive:true});
+}
+
+// ── GOOGLE DRIVE ──────────────────────────────────────────
+let gdriveToken = null;
+let gdriveConnected = false;
+const DRIVE_FOLDER_NAME = 'Fair Supplier App';
+
+function connectGoogleDrive(){
+  const clientId = document.getElementById('google-client-id').value.trim();
+  if(!clientId){showToast('Enter your Google Client ID first');return;}
+  // Save client ID
+  const cfg = getSettings();
+  cfg.googleClientId = clientId;
+  localStorage.setItem(SK2, JSON.stringify(cfg));
+
+  document.getElementById('gdrive-btn').className='gdrive-btn connecting';
+  document.getElementById('gdrive-btn-label').textContent='Connecting...';
+
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: clientId,
+    scope: 'https://www.googleapis.com/auth/drive.file',
+    callback: (response) => {
+      if(response.error){
+        showToast('Connection failed: '+response.error);
+        document.getElementById('gdrive-btn').className='gdrive-btn';
+        document.getElementById('gdrive-btn-label').textContent='Connect Google Drive';
+        return;
+      }
+      gdriveToken = response.access_token;
+      gdriveConnected = true;
+      // Save token expiry
+      const cfg2 = getSettings();
+      cfg2.gdriveToken = gdriveToken;
+      cfg2.gdriveExpiry = Date.now() + (response.expires_in * 1000);
+      localStorage.setItem(SK2, JSON.stringify(cfg2));
+      updateDriveUI();
+      showToast('Google Drive connected!');
+    }
+  });
+  client.requestAccessToken();
+}
+
+function updateDriveUI(){
+  const btn = document.getElementById('gdrive-btn');
+  const lbl = document.getElementById('gdrive-btn-label');
+  const status = document.getElementById('gdrive-status');
+  if(!btn) return;
+  if(gdriveConnected){
+    btn.className='gdrive-btn connected';
+    lbl.textContent='Connected to Google Drive';
+    if(status) status.textContent='Photos will upload automatically when you save a supplier';
+  } else {
+    btn.className='gdrive-btn';
+    lbl.textContent='Connect Google Drive';
+    if(status) status.textContent='';
+  }
+}
+
+function initGDrive(){
+  const cfg = getSettings();
+  if(cfg.googleClientId){
+    document.getElementById('google-client-id').value = cfg.googleClientId;
+  }
+  // Check if token still valid
+  if(cfg.gdriveToken && cfg.gdriveExpiry && Date.now() < cfg.gdriveExpiry){
+    gdriveToken = cfg.gdriveToken;
+    gdriveConnected = true;
+    updateDriveUI();
+  }
+}
+
+async function getDriveFolderId(name, parentId){
+  // Search for existing folder
+  let url = `https://www.googleapis.com/drive/v3/files?q=name='${encodeURIComponent(name)}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+  if(parentId) url += ` and '${parentId}' in parents`;
+  const resp = await fetch(url, {headers:{Authorization:'Bearer '+gdriveToken}});
+  const data = await resp.json();
+  if(data.files && data.files.length > 0) return data.files[0].id;
+  // Create folder
+  const createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
+    method:'POST',
+    headers:{Authorization:'Bearer '+gdriveToken,'Content-Type':'application/json'},
+    body: JSON.stringify({
+      name, mimeType:'application/vnd.google-apps.folder',
+      parents: parentId ? [parentId] : []
+    })
+  });
+  const folder = await createResp.json();
+  return folder.id;
+}
+
+async function uploadPhotoToDrive(photoData, filename, folderId){
+  const byteChars = atob(photoData.base64);
+  const byteArr = new Uint8Array(byteChars.length);
+  for(let i=0;i<byteChars.length;i++) byteArr[i]=byteChars.charCodeAt(i);
+  const blob = new Blob([byteArr], {type: photoData.type||'image/jpeg'});
+
+  const metadata = {name: filename, parents:[folderId]};
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(metadata)],{type:'application/json'}));
+  form.append('file', blob);
+
+  const resp = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+    method:'POST',
+    headers:{Authorization:'Bearer '+gdriveToken},
+    body: form
+  });
+  const result = await resp.json();
+  return result.id;
+}
+
+async function uploadSupplierPhotosToDrive(supplier){
+  if(!gdriveConnected || !gdriveToken){return null;}
+  if(!supplier.photos || supplier.photos.length === 0) return null;
+
+  try {
+    const ind = document.getElementById('upload-indicator');
+    if(ind) ind.classList.add('show');
+
+    // Create folder structure: Fair Supplier App / Fair Name / Day X - Date / Supplier Name
+    const rootId = await getDriveFolderId(DRIVE_FOLDER_NAME, null);
+    const fairId = await getDriveFolderId(supplier.fair || 'Unknown Fair', rootId);
+    const dayLabel = supplier.dayNum ? `Day ${supplier.dayNum} - ${supplier.date}` : supplier.date || 'Unknown date';
+    const dayId = await getDriveFolderId(dayLabel, fairId);
+    const supplierName = supplier.company || `Supplier_${supplier.id}`;
+    const supplierId = await getDriveFolderId(supplierName, dayId);
+
+    // Upload each photo
+    const driveIds = [];
+    for(let i=0; i<supplier.photos.length; i++){
+      const p = supplier.photos[i];
+      const ext = p.type === 'image/png' ? 'png' : 'jpg';
+      const filename = `photo_${i+1}.${ext}`;
+      const fileId = await uploadPhotoToDrive(p, filename, supplierId);
+      driveIds.push(fileId);
+    }
+
+    // Upload sample photo if exists
+    if(supplier.samplePhoto){
+      await uploadPhotoToDrive(supplier.samplePhoto, 'sample.jpg', supplierId);
+    }
+
+    if(ind) ind.classList.remove('show');
+    return {folderId: supplierId, driveIds, folderPath: `${DRIVE_FOLDER_NAME}/${supplier.fair||''}/${dayLabel}/${supplierName}`};
+  } catch(e){
+    const ind = document.getElementById('upload-indicator');
+    if(ind) ind.classList.remove('show');
+    console.error('Drive upload error:', e);
+    showToast('Drive upload failed — saved locally');
+    return null;
+  }
 }
 
 function showToast(msg){
