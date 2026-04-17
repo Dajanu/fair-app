@@ -444,6 +444,18 @@ input[type=password]:focus{border-color:var(--accent)}
   <div class="page-body">
 
     <div class="settings-section">
+      <div class="settings-section-title">Voice language</div>
+      <div class="settings-label">Language for voice notes</div>
+      <select id="voice-lang-input" style="width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:var(--rsm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:0;appearance:none">
+        <option value="pl-PL">🇵🇱 Polish</option>
+        <option value="en-US">🇺🇸 English</option>
+        <option value="zh-CN">🇨🇳 Chinese</option>
+        <option value="de-DE">🇩🇪 German</option>
+        <option value="fr-FR">🇫🇷 French</option>
+      </select>
+    </div>
+
+    <div class="settings-section">
       <div class="settings-section-title">Claude API key</div>
       <div class="api-note">Stored only on this device. Never sent anywhere except Anthropic's API.</div>
       <div class="settings-label">API key</div>
@@ -532,6 +544,7 @@ function init(){
   document.getElementById('fair-start-input').value=cfg.fairStart||'';
   document.getElementById('notion-key-input').value=cfg.notionKey||'';
   document.getElementById('notion-db-input').value=cfg.notionDb||'';
+  document.getElementById('voice-lang-input').value=cfg.voiceLang||'pl-PL';
   document.getElementById('date-display').textContent='Date: '+today();
   updateDayInfo();
   renderHome();
@@ -677,7 +690,7 @@ function startRec(){
   transcript='';
   if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
     const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    recog=new SR();recog.continuous=true;recog.interimResults=true;recog.lang='en-US';
+    recog=new SR();recog.continuous=true;recog.interimResults=true;recog.lang=getSettings().voiceLang||'pl-PL';
     recog.onresult=e=>{
       let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;
       transcript=t;
@@ -718,7 +731,8 @@ function saveSettings(){
   const nk=document.getElementById('notion-key-input').value.trim();
   const ndb=document.getElementById('notion-db-input').value.trim();
   if(!k){showToast('Please enter your API key');return;}
-  localStorage.setItem(SK2,JSON.stringify({apiKey:k,fairStart:fs,notionKey:nk,notionDb:ndb}));
+  const vl=document.getElementById('voice-lang-input').value;
+  localStorage.setItem(SK2,JSON.stringify({apiKey:k,fairStart:fs,notionKey:nk,notionDb:ndb,voiceLang:vl}));
   showToast('Saved');showScreen('screen-home');updateDayInfo();
 }
 
