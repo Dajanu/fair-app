@@ -22,7 +22,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .screen.active{display:flex}
 
 /* TOPBAR */
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;gap:12px}
+.topbar-left{flex-shrink:0}
 .topbar-left .owner{font-family:'Playfair Display',serif;font-size:19px;font-weight:400}
 .topbar-left .fair-tag{font-family:'DM Mono',monospace;font-size:10px;color:var(--red);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}
 .topbar-right{display:flex;align-items:center;gap:6px}
@@ -30,11 +31,17 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .icon-btn{width:34px;height:34px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0}
 
 /* SCROLL */
-.scroll-body{flex:1;overflow-y:auto;padding:16px 16px 110px}
+.scroll-body{flex:1;overflow-y:auto;padding:16px 16px 130px}
 
 /* FAB */
-.fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+20px);right:16px;background:var(--accent);color:#fff;border:none;border-radius:28px;padding:14px 20px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,.16);display:flex;align-items:center;gap:8px;transition:transform .12s;z-index:20}
-.fab:active{transform:scale(0.96)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px);z-index:20}
+.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 16px;border-radius:12px;transition:background .15s;color:var(--muted);font-family:'DM Sans',sans-serif}
+.bottom-nav-btn:active{background:var(--surface2)}
+.bottom-nav-btn .nav-icon{font-size:20px;line-height:1}
+.bottom-nav-btn .nav-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--dim)}
+.bottom-nav-new{background:var(--accent);border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;margin-bottom:4px;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:transform .12s;flex-shrink:0}
+.bottom-nav-new:active{transform:scale(0.94)}
+.bottom-nav-new .nav-icon{font-size:24px;color:#fff;line-height:1}
 
 /* SEARCH */
 .search-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:14px}
@@ -233,7 +240,7 @@ input[type=password]:focus{border-color:var(--accent)}
 .api-note{background:var(--surface2);border-radius:var(--rsm);padding:11px 13px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
 
 /* TOAST */
-.toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+90px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#fff;padding:10px 20px;border-radius:30px;font-size:13px;font-weight:500;opacity:0;transition:opacity .25s,transform .25s;z-index:999;white-space:nowrap}
+.toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+100px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:500;opacity:0;transition:opacity .25s,transform .25s;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -246,10 +253,8 @@ input[type=password]:focus{border-color:var(--accent)}
       <div class="owner">Damian's Fairs</div>
       <div class="fair-tag" id="home-fair-tag">ChinaPlas 2026</div>
     </div>
-    <div class="topbar-right">
+    <div class="topbar-right" style="flex-shrink:0">
       <div class="topbar-day" id="home-day-info"></div>
-      <div class="icon-btn" onclick="showSummary()">📊</div>
-      <div class="icon-btn" onclick="showScreen('screen-settings')">⚙</div>
     </div>
   </div>
   <div class="scroll-body">
@@ -273,10 +278,27 @@ input[type=password]:focus{border-color:var(--accent)}
     <div class="list-heading">Suppliers</div>
     <div id="supplier-list"></div>
   </div>
-  <button class="fab" onclick="showCapture()"><span style="font-size:18px">+</span> New supplier</button>
-  <button id="notion-sync-btn" onclick="syncToNotion()" style="position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+20px);left:16px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:28px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.08);display:flex;align-items:center;gap:7px;z-index:20;transition:transform .12s">
-    <span style="font-size:16px">🔄</span> Sync to Notion
-  </button>
+  <nav class="bottom-nav">
+    <button class="bottom-nav-btn" onclick="showSummary()">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Summary</span>
+    </button>
+    <button class="bottom-nav-btn" onclick="showScreen('screen-settings')">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Settings</span>
+    </button>
+    <button class="bottom-nav-new" onclick="showCapture()">
+      <span class="nav-icon">+</span>
+    </button>
+    <button class="bottom-nav-btn" id="notion-sync-btn" onclick="syncToNotion()">
+      <span class="nav-icon" style="font-family:'DM Mono',monospace;font-size:16px;font-weight:500">N↑</span>
+      <span class="nav-label">Notion</span>
+    </button>
+    <button class="bottom-nav-btn" onclick="exportCSV()">
+      <span class="nav-icon">📤</span>
+      <span class="nav-label">Export</span>
+    </button>
+  </nav>
 </div>
 
 <!-- CAPTURE -->
@@ -420,32 +442,45 @@ input[type=password]:focus{border-color:var(--accent)}
     <div class="page-title">Settings</div>
   </div>
   <div class="page-body">
+
     <div class="settings-section">
       <div class="settings-section-title">Claude API key</div>
-      <div class="api-note">Stored only on this device. Never shared anywhere except directly to Anthropic's API.</div>
+      <div class="api-note">Stored only on this device. Never sent anywhere except Anthropic's API.</div>
       <div class="settings-label">API key</div>
-      <input type="password" id="api-key-input" placeholder="sk-ant-…">
-      <button class="primary-btn" onclick="saveSettings()">Save</button>
+      <div style="position:relative">
+        <input type="password" id="api-key-input" placeholder="sk-ant-…" style="padding-right:50px">
+        <button onclick="toggleShow('api-key-input',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
+      </div>
     </div>
+
     <div class="settings-section">
       <div class="settings-section-title">Fair start date</div>
-      <div class="settings-label">When did ChinaPlas start? (for day counter)</div>
-      <input type="date" id="fair-start-input" style="width:100%;padding:12px;border:1.5px solid var(--border-dark);border-radius:var(--rsm);font-family:'DM Mono',monospace;font-size:13px;outline:none;background:var(--surface);color:var(--text);margin-bottom:10px">
-      <button class="primary-btn" onclick="saveSettings()">Save</button>
+      <div class="settings-label">When did the fair start? (for day counter)</div>
+      <input type="date" id="fair-start-input" style="width:100%;padding:12px;border:1.5px solid var(--border-dark);border-radius:var(--rsm);font-family:'DM Mono',monospace;font-size:13px;outline:none;background:var(--surface);color:var(--text)">
     </div>
+
     <div class="settings-section">
       <div class="settings-section-title">Notion sync</div>
-      <div class="api-note">Connect your Notion Suppliers database. Both keys are stored only on this device.</div>
+      <div class="api-note">Connect your Notion Suppliers database. Both keys stored only on this device.</div>
       <div class="settings-label">Notion integration key</div>
-      <input type="password" id="notion-key-input" placeholder="secret_…">
-      <div class="settings-label">Notion database ID</div>
-      <input type="password" id="notion-db-input" placeholder="32-character ID from URL">
-      <button class="primary-btn" onclick="saveSettings()">Save</button>
+      <div style="position:relative">
+        <input type="password" id="notion-key-input" placeholder="secret_…" style="padding-right:50px">
+        <button onclick="toggleShow('notion-key-input',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
+      </div>
+      <div class="settings-label" style="margin-top:10px">Notion database ID</div>
+      <div style="position:relative">
+        <input type="password" id="notion-db-input" placeholder="32-character ID from URL" style="padding-right:50px">
+        <button onclick="toggleShow('notion-db-input',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Mono',monospace">Show</button>
+      </div>
     </div>
-    <div class="settings-section">
+
+    <button class="primary-btn" onclick="saveSettings()">Save all settings</button>
+
+    <div class="settings-section" style="margin-top:24px">
       <div class="settings-section-title">Export</div>
       <button class="ghost-btn" style="text-align:left" onclick="exportCSV()">Export all suppliers as CSV →</button>
     </div>
+
   </div>
 </div>
 
@@ -1043,7 +1078,7 @@ async function syncToNotion(){
   if(!all.length){showToast('No suppliers to sync');return;}
 
   const btn=document.getElementById('notion-sync-btn');
-  btn.innerHTML='<span style="font-size:16px">⏳</span> Syncing…';
+  btn.querySelector('.nav-icon').textContent='⏳';
   btn.disabled=true;
 
   let success=0, failed=0;
@@ -1108,11 +1143,22 @@ async function syncToNotion(){
   localStorage.setItem(SK,JSON.stringify(all));
   renderHome();
 
-  btn.innerHTML='<span style="font-size:16px">🔄</span> Sync to Notion';
+  btn.querySelector('.nav-icon').textContent='N↑';
   btn.disabled=false;
 
   if(failed===0) showToast(`✓ ${success} suppliers synced to Notion`);
   else showToast(`${success} synced, ${failed} failed`);
+}
+
+function toggleShow(inputId, btn){
+  const input=document.getElementById(inputId);
+  if(input.type==='password'){
+    input.type='text';
+    btn.textContent='Hide';
+  } else {
+    input.type='password';
+    btn.textContent='Show';
+  }
 }
 
 function showToast(msg){
