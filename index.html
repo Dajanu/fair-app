@@ -274,6 +274,14 @@ select{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid
       </div>
       <button class="pb-btn">Process now →</button>
     </div>
+    <div id="archive-banner" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;display:none;align-items:center;justify-content:space-between;gap:12px">
+      <div>
+        <div style="font-weight:500;font-size:15px">Free up space</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px" id="archive-sub">Archive photos from processed suppliers</div>
+      </div>
+      <button onclick="archiveProcessed()" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0">Archive →</button>
+    </div>
+
     <div class="search-bar">
       <span style="font-size:14px;color:var(--dim)">🔍</span>
       <input type="text" id="search-input" placeholder="Search suppliers…" oninput="renderHome()">
@@ -941,6 +949,7 @@ function renderHome(){
     '<span>'+fmtDate(s.date)+'</span>'+
     (s.dayNum?'<span>Day '+s.dayNum+'</span>':'')+
     (s.sample?'<span style="color:var(--green)">Sample ✓</span>':'')+
+    (s.archived?'<span style="color:var(--dim)">Archived</span>':'')+
     '</div>'+
     (!isRaw&&(s.wechat_id||s.phone||s.email)?
     '<div class="quick-actions" onclick="event.stopPropagation()">'+
@@ -950,6 +959,8 @@ function renderHome(){
     '</div>':'')+
     '</div></div>';
   }).join('');
+
+  updateArchiveBanner();
 
   // Attach swipe
   filtered.forEach(s=>{
@@ -1188,6 +1199,69 @@ function clearAllData(){
 }
 
 // EXPORT
+function getStorageSize(){
+  try{
+    const data = localStorage.getItem(SK)||'[]';
+    return (new Blob([data]).size / 1024).toFixed(0);
+  }catch(e){return '?';}
+}
+
+function updateArchiveBanner(){
+  const all = getSuppliers();
+  const processed = all.filter(s=>s.processed&&!s.archived);
+  const banner = document.getElementById('archive-banner');
+  const sub = document.getElementById('archive-sub');
+  if(!banner) return;
+  if(processed.length > 0){
+    banner.style.display='flex';
+    const kb = getStorageSize();
+    if(sub) sub.textContent = processed.length+' processed suppliers · '+kb+'KB used · tap to free space';
+  } else {
+    banner.style.display='none';
+  }
+}
+
+function archiveProcessed(){
+  const all = getSuppliers();
+  const processed = all.filter(s=>s.processed&&!s.archived);
+  if(!processed.length){showToast('Nothing to archive');return;}
+  
+  if(!confirm('Remove full photos from '+processed.length+' processed suppliers?\n\nThumbnails stay. Text data stays. Notion sync stays.\nThis frees up storage for new captures.')){return;}
+
+  let freed = 0;
+  processed.forEach(s=>{
+    const before = JSON.stringify(s.photos||[]).length;
+    // Keep only tiny thumbnails (max 200px)
+    if(s.photos&&s.photos.length>0){
+      s.photos = s.photos.map(p=>{
+        try{
+          const img = new Image();
+          const canvas = document.createElement('canvas');
+          img.src = p.dataUrl;
+          const MAX = 200;
+          let w=img.width||200, h=img.height||200;
+          if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+          canvas.width=w;canvas.height=h;
+          canvas.getContext('2d').drawImage(img,0,0,w,h);
+          const thumb = canvas.toDataURL('image/jpeg',0.5);
+          return {base64:thumb.split(',')[1],dataUrl:thumb,type:'image/jpeg',archived:true};
+        }catch(e){
+          return {...p,archived:true};
+        }
+      });
+    }
+    if(s.samplePhoto) s.samplePhoto=null;
+    s.archived=true;
+    freed += before - JSON.stringify(s.photos||[]).length;
+  });
+
+  localStorage.setItem(SK, JSON.stringify(all));
+  const savedKB = Math.max(0, Math.round(freed/1024));
+  showToast('Archived! ~'+savedKB+'KB freed · '+getStorageSize()+'KB remaining');
+  updateArchiveBanner();
+  renderHome();
+}
+
 async function testNotionConnection(){
   const cfg=getSettings();
   if(!cfg.notionKey||!cfg.notionDb){showToast('Add Notion keys first');return;}
