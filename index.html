@@ -274,6 +274,9 @@ input[type=password]:focus{border-color:var(--accent)}
     <div id="supplier-list"></div>
   </div>
   <button class="fab" onclick="showCapture()"><span style="font-size:18px">+</span> New supplier</button>
+  <button id="notion-sync-btn" onclick="syncToNotion()" style="position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+20px);left:16px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:28px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.08);display:flex;align-items:center;gap:7px;z-index:20;transition:transform .12s">
+    <span style="font-size:16px">🔄</span> Sync to Notion
+  </button>
 </div>
 
 <!-- CAPTURE -->
@@ -431,6 +434,15 @@ input[type=password]:focus{border-color:var(--accent)}
       <button class="primary-btn" onclick="saveSettings()">Save</button>
     </div>
     <div class="settings-section">
+      <div class="settings-section-title">Notion sync</div>
+      <div class="api-note">Connect your Notion Suppliers database. Both keys are stored only on this device.</div>
+      <div class="settings-label">Notion integration key</div>
+      <input type="password" id="notion-key-input" placeholder="secret_…">
+      <div class="settings-label">Notion database ID</div>
+      <input type="password" id="notion-db-input" placeholder="32-character ID from URL">
+      <button class="primary-btn" onclick="saveSettings()">Save</button>
+    </div>
+    <div class="settings-section">
       <div class="settings-section-title">Export</div>
       <button class="ghost-btn" style="text-align:left" onclick="exportCSV()">Export all suppliers as CSV →</button>
     </div>
@@ -483,6 +495,8 @@ function init(){
   const cfg=getSettings();
   document.getElementById('api-key-input').value=cfg.apiKey||'';
   document.getElementById('fair-start-input').value=cfg.fairStart||'';
+  document.getElementById('notion-key-input').value=cfg.notionKey||'';
+  document.getElementById('notion-db-input').value=cfg.notionDb||'';
   document.getElementById('date-display').textContent='Date: '+today();
   updateDayInfo();
   renderHome();
@@ -666,8 +680,10 @@ function getSettings(){try{return JSON.parse(localStorage.getItem(SK2))||{};}cat
 function saveSettings(){
   const k=document.getElementById('api-key-input').value.trim();
   const fs=document.getElementById('fair-start-input').value;
+  const nk=document.getElementById('notion-key-input').value.trim();
+  const ndb=document.getElementById('notion-db-input').value.trim();
   if(!k){showToast('Please enter your API key');return;}
-  localStorage.setItem(SK2,JSON.stringify({apiKey:k,fairStart:fs}));
+  localStorage.setItem(SK2,JSON.stringify({apiKey:k,fairStart:fs,notionKey:nk,notionDb:ndb}));
   showToast('Saved');showScreen('screen-home');updateDayInfo();
 }
 
@@ -1014,6 +1030,89 @@ function exportCSV(){
   a.href='data:text/csv;charset=utf-8,'+encodeURIComponent([headers.join(','),...rows].join('\n'));
   a.download='damian-suppliers.csv';a.click();
   showToast('CSV exported');
+}
+
+async function syncToNotion(){
+  const cfg=getSettings();
+  if(!cfg.notionKey||!cfg.notionDb){
+    showToast('Add Notion keys in Settings first');
+    showScreen('screen-settings');
+    return;
+  }
+  const all=getSuppliers();
+  if(!all.length){showToast('No suppliers to sync');return;}
+
+  const btn=document.getElementById('notion-sync-btn');
+  btn.innerHTML='<span style="font-size:16px">⏳</span> Syncing…';
+  btn.disabled=true;
+
+  let success=0, failed=0;
+
+  for(const s of all){
+    if(s.notionSynced) continue;
+    try{
+      const props={
+        'Company':{title:[{text:{content:s.company||''}}]},
+        'Contact':{rich_text:[{text:{content:s.contact_name||''}}]},
+        'Phone':{phone_number:s.phone||null},
+        'WeChat ID':{rich_text:[{text:{content:s.wechat_id||''}}]},
+        'Email':{email:s.email||null},
+        'Category':{select:s.category?{name:s.category}:null},
+        'Products':{rich_text:[{text:{content:s.products||''}}]},
+        'Hall & Booth':{rich_text:[{text:{content:s.hall_booth||''}}]},
+        'MOQ':{rich_text:[{text:{content:s.moq||''}}]},
+        'Price range':{rich_text:[{text:{content:s.price_range||''}}]},
+        'Notes':{rich_text:[{text:{content:s.notes||''}}]},
+        'Status':{select:s.status?{name:s.status}:null},
+        'Priority':{select:s.priority?{name:s.priority}:null},
+        'Rating':{number:s.rating||null},
+        'Sample':{checkbox:s.sample||false},
+        'Sample ref':{rich_text:[{text:{content:s.sample_ref||''}}]},
+        'Fair':{rich_text:[{text:{content:s.fair||''}}]},
+        'Date':{date:s.date?{start:s.date}:null},
+      };
+      // remove null phone/email to avoid Notion errors
+      if(!s.phone) delete props['Phone'];
+      if(!s.email) delete props['Email'];
+      if(!s.category) delete props['Category'];
+      if(!s.status) delete props['Status'];
+      if(!s.priority) delete props['Priority'];
+      if(!s.rating) delete props['Rating'];
+      if(!s.date) delete props['Date'];
+
+      const resp=await fetch('https://api.notion.com/v1/pages',{
+        method:'POST',
+        headers:{
+          'Authorization':'Bearer '+cfg.notionKey,
+          'Content-Type':'application/json',
+          'Notion-Version':'2022-06-28'
+        },
+        body:JSON.stringify({parent:{database_id:cfg.notionDb},properties:props})
+      });
+      const data=await resp.json();
+      if(data.id){
+        s.notionSynced=true;
+        s.notionPageId=data.id;
+        success++;
+      } else {
+        console.error('Notion error',data);
+        failed++;
+      }
+    } catch(e){
+      console.error(e);
+      failed++;
+    }
+  }
+
+  // save updated sync status
+  localStorage.setItem(SK,JSON.stringify(all));
+  renderHome();
+
+  btn.innerHTML='<span style="font-size:16px">🔄</span> Sync to Notion';
+  btn.disabled=false;
+
+  if(failed===0) showToast(`✓ ${success} suppliers synced to Notion`);
+  else showToast(`${success} synced, ${failed} failed`);
 }
 
 function showToast(msg){
