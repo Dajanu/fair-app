@@ -1080,6 +1080,7 @@ function deleteSupplier(){
 
 // NOTION SYNC
 async function syncToNotion(){
+  alert('Sync button tapped! Starting...');
   const cfg=getSettings();
   if(!cfg.notionKey||!cfg.notionDb){
     if(confirm('Notion keys not set. Open Settings to add them?')){showScreen('screen-settings');}
