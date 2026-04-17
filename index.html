@@ -146,6 +146,19 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .priority-btn.sel-interesting{border-color:var(--amber);background:#fff8e6;color:var(--amber)}
 .priority-btn.sel-must{border-color:var(--red);background:#fff0f0;color:var(--red);font-weight:500}
 
+/* SAMPLE */
+.sample-row{display:flex;gap:10px;align-items:center}
+.sample-toggle{width:44px;height:26px;border-radius:13px;background:var(--border-dark);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.sample-toggle.on{background:var(--green)}
+.sample-toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.sample-toggle.on::after{transform:translateX(18px)}
+.sample-ref{flex:1;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);font-family:'DM Mono',monospace;font-size:12px;color:var(--text);outline:none;display:none}
+.sample-ref.visible{display:block}
+.sample-photo-zone{margin-top:10px;display:none}
+.sample-photo-zone.visible{display:block}
+.sample-photo-preview{width:100%;height:130px;border-radius:var(--rsm);overflow:hidden;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-direction:column;gap:4px}
+.sample-photo-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+
 /* VISIT AGAIN */
 .visit-again-btn{width:100%;padding:14px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
 .visit-again-btn.on{border-color:var(--green);background:#f0f7f4;color:var(--green)}
@@ -251,7 +264,7 @@ input[type=password]:focus,input[type=date]:focus,input[type=text]:focus{border-
       <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Total</div></div>
       <div class="stat-card"><div class="stat-num" id="st-today">0</div><div class="stat-lbl">Today</div></div>
       <div class="stat-card"><div class="stat-num" id="st-must">0</div><div class="stat-lbl">Must</div></div>
-      <div class="stat-card"><div class="stat-num" id="st-unprocessed">0</div><div class="stat-lbl">Raw</div></div>
+      <div class="stat-card"><div class="stat-num" id="st-samples">0</div><div class="stat-lbl">Samples</div></div>
     </div>
 
     <!-- Process banner - shows when unprocessed exist -->
@@ -344,6 +357,22 @@ input[type=password]:focus,input[type=date]:focus,input[type=text]:focus{border-
         <button class="priority-btn sel-standard" id="pri-standard" onclick="setPriority('Standard')">Standard</button>
         <button class="priority-btn" id="pri-interesting" onclick="setPriority('Interesting')">⭐⭐ Ciekawy</button>
         <button class="priority-btn" id="pri-must" onclick="setPriority('Must')">⭐⭐⭐ Must</button>
+      </div>
+    </div>
+
+    <div class="field-section">
+      <div class="field-label">Sample taken</div>
+      <div class="sample-row">
+        <button class="sample-toggle" id="sample-toggle" onclick="toggleSample()"></button>
+        <input class="sample-ref" id="sample-ref" placeholder="Sample ref...">
+      </div>
+      <div class="sample-photo-zone" id="sample-photo-zone">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);letter-spacing:.06em;margin:10px 0 6px">SAMPLE PHOTO</div>
+        <input type="file" id="sample-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handleSamplePhoto(this)">
+        <div class="sample-photo-preview" id="sample-photo-preview" onclick="document.getElementById('sample-photo-input').click()">
+          <div id="sample-photo-empty" style="text-align:center"><div style="font-size:22px;margin-bottom:4px">&#x1F4E6;</div><div style="font-size:13px;color:var(--muted)">Tap to photograph sample</div></div>
+          <img id="sample-photo-img">
+        </div>
       </div>
     </div>
 
@@ -474,7 +503,7 @@ input[type=password]:focus,input[type=date]:focus,input[type=text]:focus{border-
 
 <script>
 const SK='damian_v5', SK2='damian_cfg_v5';
-let photos=[], recording=false, recorder=null, chunks=[], recog=null, transcript='';
+let photos=[], recording=false, recorder=null, chunks=[], recog=null, transcript='', sampleOn=false, samplePhotoData=null;
 let fair='ChinaPlas 2026', priority='Standard', visitAgain=false;
 let filterMode='all', viewId=null;
 let processingQueue=[], processingIdx=0, processingActive=false;
@@ -541,6 +570,15 @@ function showCapture(){
   document.getElementById('pri-interesting').className='priority-btn';
   document.getElementById('pri-must').className='priority-btn';
   document.getElementById('visit-again-btn').className='visit-again-btn';
+  sampleOn=false; samplePhotoData=null;
+  document.getElementById('sample-toggle').className='sample-toggle';
+  document.getElementById('sample-ref').className='sample-ref';
+  document.getElementById('sample-ref').value='';
+  document.getElementById('sample-photo-zone').className='sample-photo-zone';
+  const spi=document.getElementById('sample-photo-img');
+  if(spi){spi.style.display='none';}
+  const spe=document.getElementById('sample-photo-empty');
+  if(spe){spe.style.display='block';}
   document.getElementById('visit-label').textContent='Mark to revisit before fair ends';
   document.getElementById('visit-icon').textContent='📍';
   showScreen('screen-capture');
@@ -629,6 +667,27 @@ function setPriority(p){
   document.getElementById('pri-must').className='priority-btn'+(p==='Must'?' sel-must':'');
 }
 
+function toggleSample(){
+  sampleOn=!sampleOn;
+  document.getElementById('sample-toggle').className='sample-toggle'+(sampleOn?' on':'');
+  document.getElementById('sample-ref').className='sample-ref'+(sampleOn?' visible':'');
+  document.getElementById('sample-photo-zone').className='sample-photo-zone'+(sampleOn?' visible':'');
+  if(sampleOn){setTimeout(()=>document.getElementById('sample-photo-input').click(),300);}
+  else{samplePhotoData=null;document.getElementById('sample-photo-img').style.display='none';document.getElementById('sample-photo-empty').style.display='block';}
+}
+
+function handleSamplePhoto(input){
+  const file=input.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    samplePhotoData={base64:e.target.result.split(',')[1],dataUrl:e.target.result,type:file.type||'image/jpeg'};
+    document.getElementById('sample-photo-img').src=e.target.result;
+    document.getElementById('sample-photo-img').style.display='block';
+    document.getElementById('sample-photo-empty').style.display='none';
+  };
+  r.readAsDataURL(file);
+}
+
 function toggleVisitAgain(){
   visitAgain=!visitAgain;
   document.getElementById('visit-again-btn').className='visit-again-btn'+(visitAgain?' on':'');
@@ -656,6 +715,9 @@ function saveRaw(){
     fair:fair||'ChinaPlas 2026',
     date:todayISO(),dayNum:getDayNum(),
     priority,visitAgain,
+    sample:sampleOn,
+    sample_ref:document.getElementById('sample-ref').value,
+    samplePhoto:samplePhotoData,
     voiceTranscript:transcript,
     textNote:document.getElementById('text-note').value.trim(),
     processed:false,status:'New',
@@ -893,7 +955,7 @@ function renderHome(){
   document.getElementById('st-total').textContent=all.length;
   document.getElementById('st-today').textContent=all.filter(s=>s.date===td).length;
   document.getElementById('st-must').textContent=all.filter(s=>s.priority==='Must').length;
-  document.getElementById('st-unprocessed').textContent=unprocessed.length;
+  document.getElementById('st-samples').textContent=all.filter(function(s){return s.sample;}).length;
 
   const banner=document.getElementById('process-banner');
   if(unprocessed.length>0){
@@ -999,6 +1061,7 @@ function viewSupplier(id){
       <div class="detail-field"><div class="detail-field-label">Status</div><div class="detail-field-val"><span class="pill ${pillClass(s.status)}">${s.status||'New'}</span></div></div>
       <div class="detail-field"><div class="detail-field-label">Fair</div><div class="detail-field-val">${s.fair||''}${s.dayNum?' · Day '+s.dayNum:''} · ${fmtDate(s.date)}</div></div>
       ${s.visitAgain?'<div class="detail-field"><div class="detail-field-label">Visit again</div><div class="detail-field-val" style="color:var(--green)">📍 Marked to revisit</div></div>':''}
+      ${s.sample?'<div class="detail-field"><div class="detail-field-label">Sample</div><div class="detail-field-val" style="color:var(--green)">Taken'+(s.sample_ref?' - '+s.sample_ref:'')+'</div></div>':''}
     </div>
     <div class="detail-section"><div class="detail-section-title">Contact & products</div>${detailFields}</div>
     <div id="email-draft-area"></div>`;
