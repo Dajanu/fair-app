@@ -641,10 +641,19 @@ function saveRaw(){
   if(!photos.length&&!transcript&&!document.getElementById('text-note').value.trim()){
     showToast('Dodaj zdjęcie lub notatkę');return;
   }
+
+  // Compress photos to reduce storage size
+  const compressedPhotos = photos.map(p=>({
+    base64: p.base64,
+    dataUrl: p.dataUrl,
+    type: p.type
+  }));
+
   const all=getSuppliers();
   const s={
     id:Date.now(),timestamp:Date.now(),
-    photos,fair:fair||'ChinaPlas 2026',
+    photos:compressedPhotos,
+    fair:fair||'ChinaPlas 2026',
     date:todayISO(),dayNum:getDayNum(),
     priority,visitAgain,
     voiceTranscript:transcript,
@@ -654,12 +663,26 @@ function saveRaw(){
     email:'',website:'',category:'',products:'',
     hall_booth:'',moq:'',price_range:'',notes:''
   };
-  all.unshift(s);
-  localStorage.setItem(SK,JSON.stringify(all));
-  showToast('Zapisano! Idź do następnego 👉');
-  renderHome();
-  // Reset for next supplier
-  setTimeout(()=>showCapture(),800);
+
+  try {
+    all.unshift(s);
+    localStorage.setItem(SK,JSON.stringify(all));
+    showToast('Zapisano ✓ Następny dostawca →');
+    renderHome();
+    setTimeout(()=>showCapture(),600);
+  } catch(e) {
+    // Storage full - try saving without photos
+    console.error('Storage full:', e);
+    try {
+      s.photos = s.photos.map(p=>({...p, base64:'', dataUrl:'[photo saved separately]'}));
+      all[0]=s;
+      localStorage.setItem(SK,JSON.stringify(all));
+      showToast('Zapisano (za dużo zdjęć - ogranicz do 3)');
+      setTimeout(()=>showCapture(),600);
+    } catch(e2) {
+      showToast('Pamięć pełna! Przetwórz dostawców wieczorem');
+    }
+  }
 }
 
 // BATCH PROCESSING
